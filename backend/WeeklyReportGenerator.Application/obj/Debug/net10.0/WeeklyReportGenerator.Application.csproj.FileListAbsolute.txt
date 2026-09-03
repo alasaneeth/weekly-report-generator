@@ -1,0 +1,16 @@
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\bin\Debug\net10.0\WeeklyReportGenerator.Application.deps.json
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\bin\Debug\net10.0\WeeklyReportGenerator.Application.dll
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\bin\Debug\net10.0\WeeklyReportGenerator.Application.pdb
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\bin\Debug\net10.0\WeeklyReportGenerator.Domain.dll
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\bin\Debug\net10.0\WeeklyReportGenerator.Domain.pdb
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\WeeklyReportGenerator.Application.csproj.AssemblyReference.cache
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\WeeklyReportGenerator.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\WeeklyReportGenerator.Application.AssemblyInfoInputs.cache
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\WeeklyReportGenerator.Application.AssemblyInfo.cs
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\WeeklyReportGenerator.Application.csproj.CoreCompileInputs.cache
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\WeeklyReportGenerator.Application.sourcelink.json
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\WeeklyRe.834388B9.Up2Date
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\WeeklyReportGenerator.Application.dll
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\refint\WeeklyReportGenerator.Application.dll
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\WeeklyReportGenerator.Application.pdb
+D:\Technical Assesment\Sisenco Digital\weekly-report-generator\backend\WeeklyReportGenerator.Application\obj\Debug\net10.0\ref\WeeklyReportGenerator.Application.dll

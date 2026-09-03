@@ -1,0 +1,55 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "WeeklyReportGenerator.Infrastructure/1.0.0": {
+        "dependencies": {
+          "WeeklyReportGenerator.Application": "1.0.0"
+        },
+        "runtime": {
+          "WeeklyReportGenerator.Infrastructure.dll": {}
+        }
+      },
+      "WeeklyReportGenerator.Application/1.0.0": {
+        "dependencies": {
+          "WeeklyReportGenerator.Domain": "1.0.0"
+        },
+        "runtime": {
+          "WeeklyReportGenerator.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "WeeklyReportGenerator.Domain/1.0.0": {
+        "runtime": {
+          "WeeklyReportGenerator.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "WeeklyReportGenerator.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "WeeklyReportGenerator.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "WeeklyReportGenerator.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
