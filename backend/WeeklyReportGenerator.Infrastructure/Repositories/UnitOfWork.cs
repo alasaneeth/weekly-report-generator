@@ -11,6 +11,8 @@ public class UnitOfWork : IUnitOfWork
     private readonly AppDbContext _context;
     private IRepository<User>? _users;
     private IRefreshTokenRepository? _refreshTokens;
+    private IWeeklyReportRepository? _weeklyReports;
+
 
     public UnitOfWork(AppDbContext context)
     {
@@ -19,6 +21,8 @@ public class UnitOfWork : IUnitOfWork
 
     public IRepository<User> Users => _users ??= new Repository<User>(_context);
     public IRefreshTokenRepository RefreshTokens => _refreshTokens ??= new RefreshTokenRepository(_context);
+
+    public IWeeklyReportRepository WeeklyReports => _weeklyReports ??= new WeeklyReportRepository(_context);
 
     public async Task<int> SaveChangesAsync()
     {
