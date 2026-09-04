@@ -12,6 +12,7 @@ public class RefreshTokenRepository : IRefreshTokenRepository
     public RefreshTokenRepository(AppDbContext context)
     {
         _context = context;
+
     }
 
     public async Task<RefreshToken?> GetByTokenAsync(string token) =>
@@ -22,4 +23,6 @@ public class RefreshTokenRepository : IRefreshTokenRepository
 
     public void Update(RefreshToken refreshToken) =>
         _context.RefreshTokens.Update(refreshToken);
+
+
 }

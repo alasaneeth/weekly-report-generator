@@ -4,6 +4,8 @@ using WeeklyReportGenerator.Domain.Entities;
 using WeeklyReportGenerator.Infrastructure.Data;
 using WeeklyReportGenerator.Infrastructure.Repositories;
 
+namespace WeeklyReportGenerator.Infrastructure.Repositories;
+
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
