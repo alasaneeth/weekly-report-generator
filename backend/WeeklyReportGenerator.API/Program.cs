@@ -44,6 +44,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, WeeklyReportGenerator.Infrastructure.Repositories.UnitOfWork>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IWeeklyReportService, WeeklyReportGenerator.Infrastructure.Services.WeeklyReportService>();
 
 // CORS
 builder.Services.AddCors(options =>
