@@ -17,16 +17,15 @@ builder.Logging.AddDebug();
 // Controllers + Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' followed by a space and your token. Example: \"Bearer 12345abcdef\"",
         Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter your JWT access token"
+        Type = SecuritySchemeType.ApiKey
     });
 
     options.AddSecurityRequirement(document =>
@@ -45,6 +44,7 @@ builder.Services.AddScoped<IUnitOfWork, WeeklyReportGenerator.Infrastructure.Rep
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IWeeklyReportService, WeeklyReportGenerator.Infrastructure.Services.WeeklyReportService>();
+
 
 // CORS
 builder.Services.AddCors(options =>

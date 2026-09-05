@@ -25,6 +25,12 @@ public class WeeklyReportConfiguration : IEntityTypeConfiguration<WeeklyReport>
         builder.Property(r => r.Links)
             .HasMaxLength(1000);
 
+        builder.Property(r => r.WeekStartDate)
+            .HasColumnType("date");
+
+        builder.Property(r => r.WeekEndDate)
+            .HasColumnType("date");
+
         // One report per user per week
         builder.HasIndex(r => new { r.UserId, r.WeekStartDate }).IsUnique();
 
