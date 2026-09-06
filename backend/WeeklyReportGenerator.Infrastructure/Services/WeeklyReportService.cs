@@ -121,9 +121,14 @@ public class WeeklyReportService : IWeeklyReportService
         });
     }
 
-    // ---------------- Module 3 — Review & Correction Workflow ----------------
+    // ---------------- Module 3/4 — Review & Team Dashboard ----------------
 
-    public async Task<IEnumerable<ManagerReportSummaryDto>> GetAllForManagerAsync(Guid? userId, string? status)
+    public async Task<IEnumerable<ManagerReportSummaryDto>> GetAllForManagerAsync(
+        Guid? userId,
+        string? status,
+        Guid? projectId,
+        DateTime? weekStartFrom,
+        DateTime? weekStartTo)
     {
         ReportStatus? parsedStatus = null;
         if (!string.IsNullOrWhiteSpace(status))
@@ -133,7 +138,8 @@ public class WeeklyReportService : IWeeklyReportService
             parsedStatus = s;
         }
 
-        var reports = await _unitOfWork.WeeklyReports.GetFilteredAsync(userId, parsedStatus);
+        var reports = await _unitOfWork.WeeklyReports.GetFilteredAsync(
+            userId, parsedStatus, projectId, weekStartFrom, weekStartTo);
 
         return reports.Select(r => new ManagerReportSummaryDto
         {

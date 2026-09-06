@@ -115,11 +115,17 @@ public class ReportsController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "Manager")]
-    public async Task<IActionResult> GetAllForManager([FromQuery] Guid? userId, [FromQuery] string? status)
+    public async Task<IActionResult> GetAllForManager(
+        [FromQuery] Guid? userId,
+        [FromQuery] string? status,
+        [FromQuery] Guid? projectId,
+        [FromQuery] DateTime? weekStartFrom,
+        [FromQuery] DateTime? weekStartTo)
     {
         try
         {
-            var result = await _reportService.GetAllForManagerAsync(userId, status);
+            var result = await _reportService.GetAllForManagerAsync(
+                userId, status, projectId, weekStartFrom, weekStartTo);
             return Ok(result);
         }
         catch (InvalidOperationException ex)

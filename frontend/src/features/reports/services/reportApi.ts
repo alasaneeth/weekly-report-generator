@@ -102,10 +102,16 @@ export const getMyReportHistoryApi = async (): Promise<ReportSummary[]> => {
 export const getAllReportsForManagerApi = async (filters?: {
   status?: string;
   userId?: string;
+  projectId?: string;
+  weekStartFrom?: string;
+  weekStartTo?: string;
 }): Promise<ManagerReportSummary[]> => {
   const params = new URLSearchParams();
   if (filters?.status) params.append('status', filters.status);
   if (filters?.userId) params.append('userId', filters.userId);
+  if (filters?.projectId) params.append('projectId', filters.projectId);
+  if (filters?.weekStartFrom) params.append('weekStartFrom', filters.weekStartFrom);
+  if (filters?.weekStartTo) params.append('weekStartTo', filters.weekStartTo);
 
   const response = await apiClient.get<ManagerReportSummary[]>(
     `/Reports?${params.toString()}`

@@ -9,6 +9,7 @@ import ReportDetailPage from '../features/reports/pages/ReportDetailPage';
 import ManagerReviewListPage from '../features/reports/pages/ManagerReviewListPage';
 import ManagerReviewDetailPage from '../features/reports/pages/ManagerReviewDetailPage';
 import ProjectsManagementPage from '../features/projects/pages/ProjectsManagementPage';
+import InsightsDashboardPage from '../features/dashboard/pages/InsightsDashboardPage';
 
 export default function AppRoutes() {
   return (
@@ -28,6 +29,7 @@ export default function AppRoutes() {
           <Route path="/manager/reports" element={<ManagerReviewListPage />} />
           <Route path="/manager/reports/:id" element={<ManagerReviewDetailPage />} />
           <Route path="/projects" element={<ProjectsManagementPage />} />
+          <Route path="/insights" element={<InsightsDashboardPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

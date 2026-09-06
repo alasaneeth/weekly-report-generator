@@ -33,6 +33,9 @@ export default function DashboardPage() {
 
         {user?.role === 'Manager' && (
           <>
+            <Link to="/insights" className="text-blue-400 hover:underline">
+              Team Insights Dashboard →
+            </Link>
             <Link to="/manager/reports" className="text-blue-400 hover:underline">
               Review Team Reports →
             </Link>
