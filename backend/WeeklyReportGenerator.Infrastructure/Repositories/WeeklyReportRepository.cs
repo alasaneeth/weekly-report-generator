@@ -52,6 +52,19 @@ public class WeeklyReportRepository : IWeeklyReportRepository
             .ToListAsync();
     }
 
+    // Used by the dashboard/analytics — loads everything needed for in-memory aggregation.
+    // Dataset is expected to stay small (weekly reports per team), so a single full load is fine.
+    public async Task<IEnumerable<WeeklyReport>> GetAllWithDetailsAsync()
+    {
+        return await _context.WeeklyReports
+            .Include(r => r.User)
+            .Include(r => r.Project)
+            .Include(r => r.Tasks)
+            .Include(r => r.Blockers)
+            .Include(r => r.HoursByTaskTypes)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<WeeklyReport>> GetFilteredAsync(
         Guid? userId,
         ReportStatus? status,
