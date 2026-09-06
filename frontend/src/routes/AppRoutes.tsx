@@ -6,6 +6,8 @@ import DashboardPage from '../features/dashboard/pages/DashboardPage';
 import ReportFormPage from '../features/reports/pages/ReportFormPage';
 import ReportHistoryPage from '../features/reports/pages/ReportHistoryPage';
 import ReportDetailPage from '../features/reports/pages/ReportDetailPage';
+import ManagerReviewListPage from '../features/reports/pages/ManagerReviewListPage';
+import ManagerReviewDetailPage from '../features/reports/pages/ManagerReviewDetailPage';
 
 export default function AppRoutes() {
   return (
@@ -19,6 +21,11 @@ export default function AppRoutes() {
           <Route path="/reports/new" element={<ReportFormPage />} />
           <Route path="/reports/history" element={<ReportHistoryPage />} />
           <Route path="/reports/:id" element={<ReportDetailPage />} />
+        </Route>
+
+        <Route element={<ProtectedRoute allowedRoles={['Manager']} />}>
+          <Route path="/manager/reports" element={<ManagerReviewListPage />} />
+          <Route path="/manager/reports/:id" element={<ManagerReviewDetailPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
