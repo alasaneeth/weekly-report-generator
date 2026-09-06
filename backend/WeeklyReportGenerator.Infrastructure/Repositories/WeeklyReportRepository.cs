@@ -52,7 +52,12 @@ public class WeeklyReportRepository : IWeeklyReportRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<WeeklyReport>> GetFilteredAsync(Guid? userId, ReportStatus? status)
+    public async Task<IEnumerable<WeeklyReport>> GetFilteredAsync(
+        Guid? userId,
+        ReportStatus? status,
+        Guid? projectId,
+        DateTime? weekStartFrom,
+        DateTime? weekStartTo)
     {
         var query = _context.WeeklyReports
             .Include(r => r.User)
@@ -64,6 +69,15 @@ public class WeeklyReportRepository : IWeeklyReportRepository
 
         if (status.HasValue)
             query = query.Where(r => r.Status == status.Value);
+
+        if (projectId.HasValue)
+            query = query.Where(r => r.ProjectId == projectId.Value);
+
+        if (weekStartFrom.HasValue)
+            query = query.Where(r => r.WeekStartDate >= weekStartFrom.Value);
+
+        if (weekStartTo.HasValue)
+            query = query.Where(r => r.WeekStartDate <= weekStartTo.Value);
 
         return await query
             .OrderByDescending(r => r.SubmittedAt ?? r.CreatedAt)
