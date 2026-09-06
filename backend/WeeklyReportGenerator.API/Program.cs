@@ -45,6 +45,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IWeeklyReportService, WeeklyReportGenerator.Infrastructure.Services.WeeklyReportService>();
 builder.Services.AddScoped<IProjectService, WeeklyReportGenerator.Infrastructure.Services.ProjectService>();
+builder.Services.AddScoped<IUserManagementService, WeeklyReportGenerator.Infrastructure.Services.UserManagementService>();
 builder.Services.AddScoped<IDashboardService, WeeklyReportGenerator.Infrastructure.Services.DashboardService>();
 builder.Services.AddScoped<IProfileService, WeeklyReportGenerator.Infrastructure.Services.ProfileService>();
 builder.Services.AddScoped<IAccountSettingsService, WeeklyReportGenerator.Infrastructure.Services.AccountSettingsService>();
