@@ -25,9 +25,18 @@ export default function DashboardPage() {
           Logout
         </button>
       </div>
-      <p className="text-slate-400"><Link to="/reports/history" className="text-blue-400 hover:underline">
-  View My Reports →
-</Link></p>
+
+      <div className="flex flex-col gap-2">
+        <Link to="/reports/history" className="text-blue-400 hover:underline">
+          View My Reports →
+        </Link>
+
+        {user?.role === 'Manager' && (
+          <Link to="/manager/reports" className="text-blue-400 hover:underline">
+            Review Team Reports →
+          </Link>
+        )}
+      </div>
     </div>
   );
 }
