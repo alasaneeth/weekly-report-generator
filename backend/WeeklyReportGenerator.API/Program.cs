@@ -47,6 +47,7 @@ builder.Services.AddScoped<IWeeklyReportService, WeeklyReportGenerator.Infrastru
 builder.Services.AddScoped<IProjectService, WeeklyReportGenerator.Infrastructure.Services.ProjectService>();
 builder.Services.AddScoped<IDashboardService, WeeklyReportGenerator.Infrastructure.Services.DashboardService>();
 builder.Services.AddScoped<IProfileService, WeeklyReportGenerator.Infrastructure.Services.ProfileService>();
+builder.Services.AddScoped<IAccountSettingsService, WeeklyReportGenerator.Infrastructure.Services.AccountSettingsService>();
 
 
 // CORS
