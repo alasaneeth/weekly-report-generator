@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WeeklyReportGenerator.Application.Common.Interfaces;
@@ -109,5 +109,60 @@ public class ReportsController : ControllerBase
     {
         var result = await _reportService.GetMyHistoryAsync(CurrentUserId);
         return Ok(result);
+    }
+
+    // ---------------- Module 3 — Review & Correction Workflow (Manager only) ----------------
+
+    [HttpGet]
+    [Authorize(Roles = "Manager")]
+    public async Task<IActionResult> GetAllForManager([FromQuery] Guid? userId, [FromQuery] string? status)
+    {
+        try
+        {
+            var result = await _reportService.GetAllForManagerAsync(userId, status);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id}/approve")]
+    [Authorize(Roles = "Manager")]
+    public async Task<IActionResult> Approve(Guid id)
+    {
+        try
+        {
+            var result = await _reportService.ApproveAsync(CurrentUserId, id);
+            return Ok(result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id}/request-changes")]
+    [Authorize(Roles = "Manager")]
+    public async Task<IActionResult> RequestChanges(Guid id, [FromBody] RequestChangesDto dto)
+    {
+        try
+        {
+            var result = await _reportService.RequestChangesAsync(CurrentUserId, id, dto.Comment);
+            return Ok(result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }
