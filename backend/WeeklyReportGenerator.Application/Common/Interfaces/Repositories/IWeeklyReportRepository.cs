@@ -9,7 +9,12 @@ public interface IWeeklyReportRepository
     Task<WeeklyReport?> GetByUserAndWeekAsync(Guid userId, DateTime weekStartDate);
     Task<IEnumerable<WeeklyReport>> GetByUserAsync(Guid userId);
     Task<IEnumerable<WeeklyReport>> GetAllAsync();
-    Task<IEnumerable<WeeklyReport>> GetFilteredAsync(Guid? userId, ReportStatus? status);
+    Task<IEnumerable<WeeklyReport>> GetFilteredAsync(
+        Guid? userId,
+        ReportStatus? status,
+        Guid? projectId,
+        DateTime? weekStartFrom,
+        DateTime? weekStartTo);
     Task AddAsync(WeeklyReport report);
     void Update(WeeklyReport report);
     void Delete(WeeklyReport report);
