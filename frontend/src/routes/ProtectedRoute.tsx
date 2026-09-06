@@ -3,9 +3,10 @@ import { useAppSelector } from '../app/hooks';
 
 interface ProtectedRouteProps {
   allowedRoles?: Array<'TeamMember' | 'Manager'>;
+  redirectTo?: string;
 }
 
-export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
+export default function ProtectedRoute({ allowedRoles, redirectTo = '/' }: ProtectedRouteProps) {
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   if (!isAuthenticated) {
@@ -13,7 +14,7 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   }
 
   if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={redirectTo} replace />;
   }
 
   return <Outlet />;

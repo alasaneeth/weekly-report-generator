@@ -32,7 +32,7 @@ export default function LoginPage() {
         })
       );
 
-      navigate('/');
+      navigate(result.role === 'Manager' ? '/' : '/reports/history');
     } catch (err: any) {
       setApiError(err.response?.data?.message ?? 'Login failed. Please try again.');
     } finally {
@@ -81,12 +81,12 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-slate-400 text-sm text-center mt-4">
+        {/* <p className="text-slate-400 text-sm text-center mt-4">
           Don't have an account?{' '}
           <Link to="/register" className="text-blue-400 hover:underline">
             Register
           </Link>
-        </p>
+        </p> */}
       </div>
     </div>
   );

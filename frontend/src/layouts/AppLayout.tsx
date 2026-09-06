@@ -26,9 +26,11 @@ export default function AppLayout() {
         </div>
 
         <nav className="flex-1 space-y-1">
-          <NavLink to="/" end className={linkClass}>
-            Dashboard
-          </NavLink>
+          {user?.role === 'Manager' && (
+            <NavLink to="/" end className={linkClass}>
+              Dashboard
+            </NavLink>
+          )}
           <NavLink to="/reports/history" className={linkClass}>
             My Reports
           </NavLink>
@@ -41,9 +43,6 @@ export default function AppLayout() {
               <div className="pt-4 pb-1 text-xs text-slate-500 uppercase tracking-wide px-4">
                 Manager
               </div>
-              <NavLink to="/insights" className={linkClass}>
-                Team Insights
-              </NavLink>
               <NavLink to="/manager/reports" className={linkClass}>
                 Review Team Reports
               </NavLink>
@@ -56,6 +55,9 @@ export default function AppLayout() {
           <div className="pt-4 pb-1 text-xs text-slate-500 uppercase tracking-wide px-4">
             Account
           </div>
+          <NavLink to="/users" className={linkClass}>
+            Team Members
+          </NavLink>
           <NavLink to="/profile" className={linkClass}>
             Profile
           </NavLink>
