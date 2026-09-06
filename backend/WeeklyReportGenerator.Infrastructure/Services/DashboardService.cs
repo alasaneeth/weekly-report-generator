@@ -66,7 +66,7 @@ public class DashboardService : IDashboardService
             var report = thisWeekReports.FirstOrDefault(r => r.UserId == m.Id);
             return new MemberStatusDto
             {
-                UserName = m.Name,
+                UserName = m.FullName,
                 Status = report?.Status.ToString() ?? "No Report"
             };
         }).ToList();
@@ -92,7 +92,7 @@ public class DashboardService : IDashboardService
             .Take(10)
             .Select(r => new RecentActivityDto
             {
-                UserName = r.User?.Name ?? string.Empty,
+                UserName = r.User?.FullName ?? string.Empty,
                 Status = r.Status.ToString(),
                 Timestamp = r.ReviewedAt ?? r.SubmittedAt ?? r.UpdatedAt ?? r.CreatedAt
             })
