@@ -46,6 +46,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IWeeklyReportService, WeeklyReportGenerator.Infrastructure.Services.WeeklyReportService>();
 builder.Services.AddScoped<IProjectService, WeeklyReportGenerator.Infrastructure.Services.ProjectService>();
 builder.Services.AddScoped<IDashboardService, WeeklyReportGenerator.Infrastructure.Services.DashboardService>();
+builder.Services.AddScoped<IProfileService, WeeklyReportGenerator.Infrastructure.Services.ProfileService>();
 
 
 // CORS
