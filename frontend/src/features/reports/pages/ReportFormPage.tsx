@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -6,6 +6,7 @@ import {
   submitReportApi,
   type SaveReportInput,
 } from '../services/reportApi';
+import { getProjectsApi, type Project } from '../../projects/services/projectApi';
 
 export default function ReportFormPage() {
   const navigate = useNavigate();
@@ -42,6 +43,11 @@ export default function ReportFormPage() {
   const blockerFields = useFieldArray({ control, name: 'blockers' });
   const achievementFields = useFieldArray({ control, name: 'achievements' });
 
+  const [projects, setProjects] = useState<Project[]>([]);
+  useEffect(() => {
+    getProjectsApi().then(setProjects).catch(() => setProjects([]));
+  }, []);
+
   const saveDraft = async (data: SaveReportInput) => {
     setApiError(null);
     setIsSubmitting(true);
@@ -77,6 +83,22 @@ export default function ReportFormPage() {
         {apiError && <p className="text-red-400 text-sm">{apiError}</p>}
 
         <form className="space-y-8">
+          {/* Project */}
+          <div>
+            <label className="block text-sm text-slate-300 mb-1">Project (optional)</label>
+            <select
+              {...register('projectId')}
+              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">No project</option>
+              {projects.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Week range */}
           <div className="grid grid-cols-2 gap-4">
             <div>

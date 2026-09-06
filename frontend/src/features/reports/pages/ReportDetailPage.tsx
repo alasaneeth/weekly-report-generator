@@ -8,6 +8,7 @@ import {
   type SaveReportInput,
   type ReportResponse,
 } from '../services/reportApi';
+import { getProjectsApi, type Project } from '../../projects/services/projectApi';
 
 export default function ReportDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,6 +24,11 @@ export default function ReportDetailPage() {
   const nextWeekFields = useFieldArray({ control, name: 'nextWeekTasks' });
   const blockerFields = useFieldArray({ control, name: 'blockers' });
   const achievementFields = useFieldArray({ control, name: 'achievements' });
+
+  const [projects, setProjects] = useState<Project[]>([]);
+  useEffect(() => {
+    getProjectsApi().then(setProjects).catch(() => setProjects([]));
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -98,9 +104,14 @@ export default function ReportDetailPage() {
       <div className="min-h-screen bg-slate-900 p-6">
         <div className="max-w-3xl mx-auto bg-slate-800 rounded-xl p-8 shadow-lg space-y-6">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-white">
-              Week of {new Date(report.weekStartDate).toLocaleDateString()}
-            </h1>
+            <div>
+              <h1 className="text-2xl font-bold text-white">
+                Week of {new Date(report.weekStartDate).toLocaleDateString()}
+              </h1>
+              {report.projectName && (
+                <p className="text-slate-400 text-sm">{report.projectName}</p>
+              )}
+            </div>
             <span className="bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
               {report.status}
             </span>
@@ -190,6 +201,21 @@ export default function ReportDetailPage() {
         {apiError && <p className="text-red-400 text-sm">{apiError}</p>}
 
         <form className="space-y-8">
+          <div>
+            <label className="block text-sm text-slate-300 mb-1">Project (optional)</label>
+            <select
+              {...register('projectId')}
+              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+            >
+              <option value="">No project</option>
+              {projects.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-slate-300 mb-1">Week Start</label>
