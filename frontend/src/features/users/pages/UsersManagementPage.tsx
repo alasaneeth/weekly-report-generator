@@ -94,143 +94,136 @@ export default function UsersManagementPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
+    <div className="page p-6 md:p-8">
       <div className="max-w-3xl mx-auto space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-white">Team Members</h1>
+          <h1 className="page-title">Team Members</h1>
           {isManager && (
             <button
               onClick={() => setShowCreateForm(!showCreateForm)}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition"
+              className="btn btn-primary"
             >
               {showCreateForm ? 'Cancel' : '+ New User'}
             </button>
           )}
         </div>
 
-        {error && <p className="text-red-400 text-sm">{error}</p>}
+        {error && <div className="alert alert-danger">{error}</div>}
 
         {isManager && showCreateForm && (
-          <div className="bg-slate-800 rounded-xl p-6 space-y-3">
-            <h2 className="text-lg font-semibold text-white">New User</h2>
+          <div className="panel p-6 space-y-3">
+            <h2 className="section-title">New user</h2>
             <div className="grid grid-cols-2 gap-3">
               <input
                 placeholder="First Name"
                 value={createForm.firstName}
                 onChange={(e) => setCreateForm({ ...createForm, firstName: e.target.value })}
-                className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                className="input"
               />
               <input
                 placeholder="Last Name"
                 value={createForm.lastName}
                 onChange={(e) => setCreateForm({ ...createForm, lastName: e.target.value })}
-                className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                className="input"
               />
               <input
                 placeholder="Email"
                 value={createForm.email}
                 onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
-                className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                className="input"
               />
               <input
                 type="password"
                 placeholder="Password"
                 value={createForm.password}
                 onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
-                className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                className="input"
               />
               <input
                 type="date"
                 value={createForm.dateOfBirth ?? ''}
                 onChange={(e) => setCreateForm({ ...createForm, dateOfBirth: e.target.value })}
-                className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                className="input"
               />
               <input
                 placeholder="Mobile"
                 value={createForm.mobile ?? ''}
                 onChange={(e) => setCreateForm({ ...createForm, mobile: e.target.value })}
-                className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                className="input"
               />
               <select
                 value={createForm.role}
                 onChange={(e) =>
                   setCreateForm({ ...createForm, role: e.target.value as 'TeamMember' | 'Manager' })
                 }
-                className="rounded-lg bg-slate-700 text-white px-3 py-2 col-span-2"
+                className="input col-span-2"
               >
                 <option value="TeamMember">Team Member</option>
                 <option value="Manager">Manager</option>
               </select>
             </div>
-            <button
-              onClick={handleCreate}
-              disabled={isSaving}
-              className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white font-semibold px-4 py-2 rounded-lg transition"
-            >
-              Create User
+            <button onClick={handleCreate} disabled={isSaving} className="btn btn-success">
+              Create user
             </button>
           </div>
         )}
 
         <div className="space-y-2">
-          {loading && <p className="text-slate-400">Loading...</p>}
-          {!loading && users.length === 0 && <p className="text-slate-400">No users found.</p>}
+          {loading && <p className="text-ink-muted text-sm">Loading…</p>}
+          {!loading && users.length === 0 && <p className="text-ink-muted text-sm">No users found.</p>}
 
           {users.map((u) =>
             editingId === u.id && editForm ? (
-              <div key={u.id} className="bg-slate-800 rounded-lg p-4 space-y-3">
+              <div key={u.id} className="panel p-4 space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <input
                     value={editForm.firstName}
                     onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
-                    className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                    className="input"
                   />
                   <input
                     value={editForm.lastName}
                     onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
-                    className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                    className="input"
                   />
                   <input
                     value={editForm.email}
                     onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                    className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                    className="input"
                   />
                   <input
                     type="date"
                     value={editForm.dateOfBirth ?? ''}
                     onChange={(e) => setEditForm({ ...editForm, dateOfBirth: e.target.value })}
-                    className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                    className="input"
                   />
                   <input
                     value={editForm.mobile ?? ''}
                     onChange={(e) => setEditForm({ ...editForm, mobile: e.target.value })}
-                    className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                    className="input"
                   />
                   <select
                     value={editForm.role}
                     onChange={(e) =>
                       setEditForm({ ...editForm, role: e.target.value as 'TeamMember' | 'Manager' })
                     }
-                    className="rounded-lg bg-slate-700 text-white px-3 py-2"
+                    className="input"
                   >
                     <option value="TeamMember">Team Member</option>
                     <option value="Manager">Manager</option>
                   </select>
                 </div>
-                <label className="flex items-center gap-2 text-slate-300 text-sm">
+                <label className="flex items-center gap-2 text-ink text-sm">
                   <input
                     type="checkbox"
                     checked={editForm.isActive}
                     onChange={(e) => setEditForm({ ...editForm, isActive: e.target.checked })}
+                    className="checkbox"
                   />
                   Active
                 </label>
                 <div className="flex gap-3">
-                  <button
-                    onClick={handleUpdate}
-                    disabled={isSaving}
-                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold px-4 py-2 rounded-lg transition"
-                  >
+                  <button onClick={handleUpdate} disabled={isSaving} className="btn btn-primary">
                     Save
                   </button>
                   <button
@@ -238,35 +231,27 @@ export default function UsersManagementPage() {
                       setEditingId(null);
                       setEditForm(null);
                     }}
-                    className="bg-slate-600 hover:bg-slate-500 text-white font-semibold px-4 py-2 rounded-lg transition"
+                    className="btn btn-secondary"
                   >
                     Cancel
                   </button>
                 </div>
               </div>
             ) : (
-              <div
-                key={u.id}
-                className="bg-slate-800 rounded-lg p-4 flex justify-between items-center"
-              >
+              <div key={u.id} className="panel p-4 flex justify-between items-center">
                 <div>
-                  <p className="text-white font-medium">
+                  <p className="text-ink font-medium text-sm">
                     {u.firstName} {u.lastName}{' '}
-                    {!u.isActive && <span className="text-slate-500 text-xs">(Inactive)</span>}
+                    {!u.isActive && <span className="badge badge-neutral ml-1">Inactive</span>}
                   </p>
-                  <p className="text-slate-400 text-sm">
+                  <p className="text-ink-muted text-sm mt-0.5">
                     {u.email} {u.mobile && `· ${u.mobile}`}
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                    {u.role}
-                  </span>
+                <div className="flex items-center gap-4">
+                  <span className="badge badge-primary">{u.role}</span>
                   {isManager && (
-                    <button
-                      onClick={() => startEdit(u)}
-                      className="text-blue-400 hover:underline text-sm"
-                    >
+                    <button onClick={() => startEdit(u)} className="link-action">
                       Edit
                     </button>
                   )}

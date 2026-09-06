@@ -76,20 +76,17 @@ export default function ReportFormPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
-      <div className="max-w-4xl mx-auto bg-slate-800 rounded-xl p-8 shadow-lg space-y-8">
-        <h1 className="text-2xl font-bold text-white">New Weekly Report</h1>
+    <div className="page p-6 md:p-8">
+      <div className="max-w-4xl mx-auto panel p-8 space-y-8">
+        <h1 className="page-title">New Weekly Report</h1>
 
-        {apiError && <p className="text-red-400 text-sm">{apiError}</p>}
+        {apiError && <div className="alert alert-danger">{apiError}</div>}
 
         <form className="space-y-8">
           {/* Project */}
           <div>
-            <label className="block text-sm text-slate-300 mb-1">Project (optional)</label>
-            <select
-              {...register('projectId')}
-              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-            >
+            <label className="field-label">Project (optional)</label>
+            <select {...register('projectId')} className="input">
               <option value="">No project</option>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -102,19 +99,19 @@ export default function ReportFormPage() {
           {/* Week range */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Week Start</label>
+              <label className="field-label">Week start</label>
               <input
                 type="date"
                 {...register('weekStartDate', { required: true })}
-                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                className="input"
               />
             </div>
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Week End</label>
+              <label className="field-label">Week end</label>
               <input
                 type="date"
                 {...register('weekEndDate', { required: true })}
-                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                className="input"
               />
             </div>
           </div>
@@ -122,7 +119,7 @@ export default function ReportFormPage() {
           {/* Tasks */}
           <section>
             <div className="flex justify-between items-center mb-3">
-              <h2 className="text-lg font-semibold text-white">Tasks Completed</h2>
+              <h2 className="section-title">Tasks completed</h2>
               <button
                 type="button"
                 onClick={() =>
@@ -137,29 +134,29 @@ export default function ReportFormPage() {
                     deliverable: '',
                   })
                 }
-                className="text-blue-400 hover:underline text-sm"
+                className="link-action"
               >
-                + Add Task
+                + Add task
               </button>
             </div>
 
             <div className="space-y-4">
               {taskFields.fields.map((field, index) => (
-                <div key={field.id} className="bg-slate-700 rounded-lg p-4 space-y-3">
+                <div key={field.id} className="subpanel p-4 space-y-3">
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">Task Name</label>
+                    <label className="field-label">Task name</label>
                     <input
                       {...register(`tasks.${index}.taskName` as const, { required: true })}
-                      className="w-full rounded-lg bg-slate-600 text-white px-3 py-2 outline-none"
+                      className="input"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Priority</label>
+                      <label className="field-label">Priority</label>
                       <select
                         {...register(`tasks.${index}.priority` as const)}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       >
                         <option value="Low">Low</option>
                         <option value="Medium">Medium</option>
@@ -168,10 +165,10 @@ export default function ReportFormPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Status</label>
+                      <label className="field-label">Status</label>
                       <select
                         {...register(`tasks.${index}.status` as const)}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       >
                         <option value="NotStarted">Not Started</option>
                         <option value="InProgress">In Progress</option>
@@ -181,58 +178,54 @@ export default function ReportFormPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Planned %</label>
+                      <label className="field-label">Planned %</label>
                       <input
                         type="number"
                         {...register(`tasks.${index}.plannedPercentage` as const, {
                           valueAsNumber: true,
                         })}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Actual %</label>
+                      <label className="field-label">Actual %</label>
                       <input
                         type="number"
                         {...register(`tasks.${index}.actualPercentage` as const, {
                           valueAsNumber: true,
                         })}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">
-                        Time Planned (hrs)
-                      </label>
+                      <label className="field-label">Time planned (hrs)</label>
                       <input
                         type="number"
                         {...register(`tasks.${index}.timePlannedHours` as const, {
                           valueAsNumber: true,
                         })}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">
-                        Time Spent (hrs)
-                      </label>
+                      <label className="field-label">Time spent (hrs)</label>
                       <input
                         type="number"
                         {...register(`tasks.${index}.timeSpentHours` as const, {
                           valueAsNumber: true,
                         })}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       />
                     </div>
 
                     <div className="col-span-2">
-                      <label className="block text-xs text-slate-400 mb-1">Deliverable</label>
+                      <label className="field-label">Deliverable</label>
                       <input
                         {...register(`tasks.${index}.deliverable` as const)}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       />
                     </div>
                   </div>
@@ -241,7 +234,7 @@ export default function ReportFormPage() {
                     <button
                       type="button"
                       onClick={() => taskFields.remove(index)}
-                      className="text-red-400 text-xs hover:underline"
+                      className="link-danger"
                     >
                       Remove task
                     </button>
@@ -254,11 +247,11 @@ export default function ReportFormPage() {
           {/* Next week tasks */}
           <section>
             <div className="flex justify-between items-center mb-3">
-              <h2 className="text-lg font-semibold text-white">Planned for Next Week</h2>
+              <h2 className="section-title">Planned for next week</h2>
               <button
                 type="button"
                 onClick={() => nextWeekFields.append({ taskName: '', description: '' })}
-                className="text-blue-400 hover:underline text-sm"
+                className="link-action"
               >
                 + Add
               </button>
@@ -267,28 +260,26 @@ export default function ReportFormPage() {
               {nextWeekFields.fields.map((field, index) => (
                 <div key={field.id} className="grid grid-cols-2 gap-2 items-end">
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">Task Name</label>
+                    <label className="field-label">Task name</label>
                     <input
                       {...register(`nextWeekTasks.${index}.taskName` as const)}
-                      className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+                      className="input"
                     />
                   </div>
                   <div className="flex gap-2 items-end">
                     <div className="flex-1">
-                      <label className="block text-xs text-slate-400 mb-1">
-                        Description (optional)
-                      </label>
+                      <label className="field-label">Description (optional)</label>
                       <input
                         {...register(`nextWeekTasks.${index}.description` as const)}
-                        className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+                        className="input"
                       />
                     </div>
                     <button
                       type="button"
                       onClick={() => nextWeekFields.remove(index)}
-                      className="text-red-400 text-sm pb-2"
+                      className="link-danger pb-2.5"
                     >
-                      ✕
+                      Remove
                     </button>
                   </div>
                 </div>
@@ -299,35 +290,39 @@ export default function ReportFormPage() {
           {/* Blockers */}
           <section>
             <div className="flex justify-between items-center mb-3">
-              <h2 className="text-lg font-semibold text-white">Blockers</h2>
+              <h2 className="section-title">Blockers</h2>
               <button
                 type="button"
                 onClick={() => blockerFields.append({ description: '', isKeyIssue: false })}
-                className="text-blue-400 hover:underline text-sm"
+                className="link-action"
               >
-                + Add Blocker
+                + Add blocker
               </button>
             </div>
             <div className="space-y-3">
               {blockerFields.fields.map((field, index) => (
-                <div key={field.id} className="flex items-end gap-2">
+                <div key={field.id} className="flex items-end gap-3">
                   <div className="flex-1">
-                    <label className="block text-xs text-slate-400 mb-1">Description</label>
+                    <label className="field-label">Description</label>
                     <input
                       {...register(`blockers.${index}.description` as const)}
-                      className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+                      className="input"
                     />
                   </div>
-                  <label className="flex items-center gap-1 text-slate-300 text-sm whitespace-nowrap pb-2">
-                    <input type="checkbox" {...register(`blockers.${index}.isKeyIssue` as const)} />
-                    Key Issue
+                  <label className="flex items-center gap-1.5 text-ink text-sm whitespace-nowrap pb-2.5">
+                    <input
+                      type="checkbox"
+                      {...register(`blockers.${index}.isKeyIssue` as const)}
+                      className="checkbox"
+                    />
+                    Key issue
                   </label>
                   <button
                     type="button"
                     onClick={() => blockerFields.remove(index)}
-                    className="text-red-400 text-sm pb-2"
+                    className="link-danger pb-2.5"
                   >
-                    ✕
+                    Remove
                   </button>
                 </div>
               ))}
@@ -337,40 +332,41 @@ export default function ReportFormPage() {
           {/* Achievements */}
           <section>
             <div className="flex justify-between items-center mb-3">
-              <h2 className="text-lg font-semibold text-white">Achievements</h2>
+              <h2 className="section-title">Achievements</h2>
               <button
                 type="button"
                 onClick={() =>
                   achievementFields.append({ description: '', isKeyAchievement: false })
                 }
-                className="text-blue-400 hover:underline text-sm"
+                className="link-action"
               >
-                + Add Achievement
+                + Add achievement
               </button>
             </div>
             <div className="space-y-3">
               {achievementFields.fields.map((field, index) => (
-                <div key={field.id} className="flex items-end gap-2">
+                <div key={field.id} className="flex items-end gap-3">
                   <div className="flex-1">
-                    <label className="block text-xs text-slate-400 mb-1">Description</label>
+                    <label className="field-label">Description</label>
                     <input
                       {...register(`achievements.${index}.description` as const)}
-                      className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+                      className="input"
                     />
                   </div>
-                  <label className="flex items-center gap-1 text-slate-300 text-sm whitespace-nowrap pb-2">
+                  <label className="flex items-center gap-1.5 text-ink text-sm whitespace-nowrap pb-2.5">
                     <input
                       type="checkbox"
                       {...register(`achievements.${index}.isKeyAchievement` as const)}
+                      className="checkbox"
                     />
-                    Key Achievement
+                    Key achievement
                   </label>
                   <button
                     type="button"
                     onClick={() => achievementFields.remove(index)}
-                    className="text-red-400 text-sm pb-2"
+                    className="link-danger pb-2.5"
                   >
-                    ✕
+                    Remove
                   </button>
                 </div>
               ))}
@@ -380,40 +376,32 @@ export default function ReportFormPage() {
           {/* Notes / Links */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Notes (optional)</label>
-              <textarea
-                {...register('notes')}
-                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
-                rows={3}
-              />
+              <label className="field-label">Notes (optional)</label>
+              <textarea {...register('notes')} className="input" rows={3} />
             </div>
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Links (optional)</label>
-              <textarea
-                {...register('links')}
-                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
-                rows={3}
-              />
+              <label className="field-label">Links (optional)</label>
+              <textarea {...register('links')} className="input" rows={3} />
             </div>
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 border-t border-border pt-6">
             <button
               type="button"
               disabled={isSubmitting}
               onClick={handleSubmit(saveDraft)}
-              className="bg-slate-600 hover:bg-slate-500 disabled:opacity-50 text-white font-semibold px-4 py-2 rounded-lg transition"
+              className="btn btn-secondary"
             >
-              Save Draft
+              Save draft
             </button>
             <button
               type="button"
               disabled={isSubmitting}
               onClick={handleSubmit(saveAndSubmit)}
-              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold px-4 py-2 rounded-lg transition"
+              className="btn btn-primary"
             >
-              Submit Report
+              Submit report
             </button>
           </div>
         </form>
