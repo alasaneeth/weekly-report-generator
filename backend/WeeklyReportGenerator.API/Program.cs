@@ -44,6 +44,7 @@ builder.Services.AddScoped<IUnitOfWork, WeeklyReportGenerator.Infrastructure.Rep
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IWeeklyReportService, WeeklyReportGenerator.Infrastructure.Services.WeeklyReportService>();
+builder.Services.AddScoped<IProjectService, WeeklyReportGenerator.Infrastructure.Services.ProjectService>();
 
 
 // CORS

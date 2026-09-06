@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WeeklyReportGenerator.Application.Common.Interfaces.Repositories;
 using WeeklyReportGenerator.Domain.Entities;
+using WeeklyReportGenerator.Domain.Enums;
 using WeeklyReportGenerator.Infrastructure.Data;
 
 namespace WeeklyReportGenerator.Infrastructure.Repositories;
@@ -48,6 +49,24 @@ public class WeeklyReportRepository : IWeeklyReportRepository
             .Include(r => r.User)
             .Include(r => r.Project)
             .OrderByDescending(r => r.WeekStartDate)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<WeeklyReport>> GetFilteredAsync(Guid? userId, ReportStatus? status)
+    {
+        var query = _context.WeeklyReports
+            .Include(r => r.User)
+            .Include(r => r.Project)
+            .AsQueryable();
+
+        if (userId.HasValue)
+            query = query.Where(r => r.UserId == userId.Value);
+
+        if (status.HasValue)
+            query = query.Where(r => r.Status == status.Value);
+
+        return await query
+            .OrderByDescending(r => r.SubmittedAt ?? r.CreatedAt)
             .ToListAsync();
     }
 
