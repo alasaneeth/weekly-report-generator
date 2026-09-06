@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WeeklyReportGenerator.Domain.Entities;
 
@@ -12,9 +12,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasKey(u => u.Id);
 
-        builder.Property(u => u.Name)
+        builder.Property(u => u.FirstName)
             .IsRequired()
-            .HasMaxLength(150);
+            .HasMaxLength(100);
+
+        builder.Property(u => u.LastName)
+            .IsRequired()
+            .HasMaxLength(100);
 
         builder.Property(u => u.Email)
             .IsRequired()
@@ -30,6 +34,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasConversion<string>()
             .HasMaxLength(50);
+
+        builder.Property(u => u.DateOfBirth)
+            .HasColumnType("date");
+
+        builder.Property(u => u.Mobile)
+            .HasMaxLength(20);
+
+        builder.Ignore(u => u.FullName);
 
         builder.HasQueryFilter(u => !u.IsDeleted);
     }
