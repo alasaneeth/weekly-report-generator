@@ -37,14 +37,27 @@ export default function RegisterPage() {
         <h1 className="text-2xl font-bold text-white mb-6 text-center">Create Account</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm text-slate-300 mb-1">Full Name</label>
-            <input
-              type="text"
-              {...register('name', { required: 'Name is required' })}
-              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name.message}</p>}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm text-slate-300 mb-1">First Name</label>
+              <input
+                {...register('firstName', { required: 'First name is required' })}
+                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.firstName && (
+                <p className="text-red-400 text-sm mt-1">{errors.firstName.message}</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm text-slate-300 mb-1">Last Name</label>
+              <input
+                {...register('lastName', { required: 'Last name is required' })}
+                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.lastName && (
+                <p className="text-red-400 text-sm mt-1">{errors.lastName.message}</p>
+              )}
+            </div>
           </div>
 
           <div>
@@ -70,6 +83,24 @@ export default function RegisterPage() {
             {errors.password && (
               <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
             )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm text-slate-300 mb-1">Date of Birth</label>
+              <input
+                type="date"
+                {...register('dateOfBirth')}
+                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-slate-300 mb-1">Mobile</label>
+              <input
+                {...register('mobile')}
+                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
 
           <div>

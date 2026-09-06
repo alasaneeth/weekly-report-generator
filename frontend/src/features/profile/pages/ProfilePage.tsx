@@ -3,7 +3,10 @@ import { getMyProfileApi, updateProfileApi, type Profile } from '../services/pro
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [mobile, setMobile] = useState('');
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -13,7 +16,10 @@ export default function ProfilePage() {
     getMyProfileApi()
       .then((data) => {
         setProfile(data);
-        setName(data.name);
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+        setDateOfBirth(data.dateOfBirth ? data.dateOfBirth.split('T')[0] : '');
+        setMobile(data.mobile ?? '');
       })
       .catch(() => setError('Failed to load profile.'))
       .finally(() => setLoading(false));
@@ -22,13 +28,18 @@ export default function ProfilePage() {
   const handleSave = async () => {
     setError(null);
     setSuccessMessage(null);
-    if (!name.trim()) {
-      setError('Name cannot be empty.');
+    if (!firstName.trim() || !lastName.trim()) {
+      setError('First name and last name cannot be empty.');
       return;
     }
     setIsSaving(true);
     try {
-      const updated = await updateProfileApi(name);
+      const updated = await updateProfileApi({
+        firstName,
+        lastName,
+        dateOfBirth: dateOfBirth || null,
+        mobile: mobile || null,
+      });
       setProfile(updated);
       setSuccessMessage('Profile updated successfully.');
     } catch (err: any) {
@@ -54,13 +65,23 @@ export default function ProfilePage() {
         {error && <p className="text-red-400 text-sm">{error}</p>}
         {successMessage && <p className="text-green-400 text-sm">{successMessage}</p>}
 
-        <div>
-          <label className="block text-sm text-slate-300 mb-1">Name</label>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm text-slate-300 mb-1">First Name</label>
+            <input
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-slate-300 mb-1">Last Name</label>
+            <input
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         </div>
 
         <div>
@@ -70,6 +91,26 @@ export default function ProfilePage() {
             disabled
             className="w-full rounded-lg bg-slate-900 text-slate-500 px-3 py-2 cursor-not-allowed"
           />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm text-slate-300 mb-1">Date of Birth</label>
+            <input
+              type="date"
+              value={dateOfBirth}
+              onChange={(e) => setDateOfBirth(e.target.value)}
+              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-slate-300 mb-1">Mobile</label>
+            <input
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         </div>
 
         <div>
