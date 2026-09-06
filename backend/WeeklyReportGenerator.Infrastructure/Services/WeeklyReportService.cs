@@ -1,4 +1,4 @@
-﻿using WeeklyReportGenerator.Application.Common.Interfaces;
+using WeeklyReportGenerator.Application.Common.Interfaces;
 using WeeklyReportGenerator.Application.DTOs.Reports;
 using WeeklyReportGenerator.Domain.Entities;
 using WeeklyReportGenerator.Domain.Enums;
@@ -120,6 +120,78 @@ public class WeeklyReportService : IWeeklyReportService
             ProjectName = r.Project?.Name
         });
     }
+
+    // ---------------- Module 3 — Review & Correction Workflow ----------------
+
+    public async Task<IEnumerable<ManagerReportSummaryDto>> GetAllForManagerAsync(Guid? userId, string? status)
+    {
+        ReportStatus? parsedStatus = null;
+        if (!string.IsNullOrWhiteSpace(status))
+        {
+            if (!Enum.TryParse<ReportStatus>(status, true, out var s))
+                throw new InvalidOperationException("Invalid status filter provided.");
+            parsedStatus = s;
+        }
+
+        var reports = await _unitOfWork.WeeklyReports.GetFilteredAsync(userId, parsedStatus);
+
+        return reports.Select(r => new ManagerReportSummaryDto
+        {
+            Id = r.Id,
+            UserId = r.UserId,
+            UserName = r.User?.Name ?? string.Empty,
+            WeekStartDate = r.WeekStartDate,
+            WeekEndDate = r.WeekEndDate,
+            Status = r.Status.ToString(),
+            ProjectName = r.Project?.Name,
+            SubmittedAt = r.SubmittedAt
+        });
+    }
+
+    public async Task<WeeklyReportResponseDto> ApproveAsync(Guid managerId, Guid reportId)
+    {
+        var report = await _unitOfWork.WeeklyReports.GetByIdWithDetailsAsync(reportId)
+            ?? throw new KeyNotFoundException("Report not found.");
+
+        if (report.Status != ReportStatus.Submitted)
+            throw new InvalidOperationException("Only Submitted reports can be approved.");
+
+        report.Status = ReportStatus.Approved;
+        report.ManagerComment = null;
+        report.ReviewedAt = DateTime.UtcNow;
+        report.UpdatedAt = DateTime.UtcNow;
+        report.UpdatedBy = managerId;
+
+        _unitOfWork.WeeklyReports.Update(report);
+        await _unitOfWork.SaveChangesAsync();
+
+        return await GetByIdAsync(managerId, reportId, isManager: true);
+    }
+
+    public async Task<WeeklyReportResponseDto> RequestChangesAsync(Guid managerId, Guid reportId, string comment)
+    {
+        if (string.IsNullOrWhiteSpace(comment))
+            throw new InvalidOperationException("A comment is required when requesting changes.");
+
+        var report = await _unitOfWork.WeeklyReports.GetByIdWithDetailsAsync(reportId)
+            ?? throw new KeyNotFoundException("Report not found.");
+
+        if (report.Status != ReportStatus.Submitted)
+            throw new InvalidOperationException("Only Submitted reports can be sent back for correction.");
+
+        report.Status = ReportStatus.NeedsCorrection;
+        report.ManagerComment = comment;
+        report.ReviewedAt = DateTime.UtcNow;
+        report.UpdatedAt = DateTime.UtcNow;
+        report.UpdatedBy = managerId;
+
+        _unitOfWork.WeeklyReports.Update(report);
+        await _unitOfWork.SaveChangesAsync();
+
+        return await GetByIdAsync(managerId, reportId, isManager: true);
+    }
+
+    // ---------------------------------------------------------------------
 
     private static void MapChildCollections(WeeklyReport report, SaveWeeklyReportDto dto)
     {
