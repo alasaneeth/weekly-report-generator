@@ -43,6 +43,7 @@ export interface ReportResponse extends SaveReportInput {
   id: string;
   userId: string;
   userName: string;
+  projectName?: string | null;
   status: string;
   managerComment: string | null;
   submittedAt: string | null;
@@ -54,6 +55,18 @@ export interface ReportSummary {
   weekEndDate: string;
   status: string;
   projectName: string | null;
+}
+
+// Module 3 — Manager review types
+export interface ManagerReportSummary {
+  id: string;
+  userId: string;
+  userName: string;
+  weekStartDate: string;
+  weekEndDate: string;
+  status: string;
+  projectName: string | null;
+  submittedAt: string | null;
 }
 
 export const createReportApi = async (data: SaveReportInput): Promise<ReportResponse> => {
@@ -81,5 +94,36 @@ export const getReportByIdApi = async (id: string): Promise<ReportResponse> => {
 
 export const getMyReportHistoryApi = async (): Promise<ReportSummary[]> => {
   const response = await apiClient.get<ReportSummary[]>('/Reports/mine');
+  return response.data;
+};
+
+// ---------------- Module 3 — Review & Correction Workflow (Manager only) ----------------
+
+export const getAllReportsForManagerApi = async (filters?: {
+  status?: string;
+  userId?: string;
+}): Promise<ManagerReportSummary[]> => {
+  const params = new URLSearchParams();
+  if (filters?.status) params.append('status', filters.status);
+  if (filters?.userId) params.append('userId', filters.userId);
+
+  const response = await apiClient.get<ManagerReportSummary[]>(
+    `/Reports?${params.toString()}`
+  );
+  return response.data;
+};
+
+export const approveReportApi = async (id: string): Promise<ReportResponse> => {
+  const response = await apiClient.post<ReportResponse>(`/Reports/${id}/approve`);
+  return response.data;
+};
+
+export const requestChangesApi = async (
+  id: string,
+  comment: string
+): Promise<ReportResponse> => {
+  const response = await apiClient.post<ReportResponse>(`/Reports/${id}/request-changes`, {
+    comment,
+  });
   return response.data;
 };
