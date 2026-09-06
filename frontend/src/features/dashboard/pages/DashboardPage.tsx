@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { logout } from '../../auth/store/authSlice';
 
@@ -25,7 +25,9 @@ export default function DashboardPage() {
           Logout
         </button>
       </div>
-      <p className="text-slate-400">Dashboard content coming soon...</p>
+      <p className="text-slate-400"><Link to="/reports/history" className="text-blue-400 hover:underline">
+  View My Reports →
+</Link></p>
     </div>
   );
 }

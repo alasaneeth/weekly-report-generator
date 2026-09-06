@@ -7,6 +7,7 @@ public interface IUnitOfWork : IDisposable
 {
     IRepository<User> Users { get; }
     IRefreshTokenRepository RefreshTokens { get; }
+    IWeeklyReportRepository WeeklyReports { get; }
 
     Task<int> SaveChangesAsync();
 }
