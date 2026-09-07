@@ -41,14 +41,14 @@ export default function RegisterPage() {
           <span className="font-semibold text-ink tracking-tight">WorkLog</span>
         </div>
 
-        <div className="panel p-8">
+        <div className="panel p-4 sm:p-8">
           <h1 className="page-title text-center mb-1">Create account</h1>
           <p className="text-ink-muted text-sm text-center mb-6">
             Set up access to start submitting weekly reports.
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="field-label">First name</label>
                 <input
@@ -96,7 +96,7 @@ export default function RegisterPage() {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="field-label">Date of birth</label>
                 <input type="date" {...register('dateOfBirth')} className="input" />

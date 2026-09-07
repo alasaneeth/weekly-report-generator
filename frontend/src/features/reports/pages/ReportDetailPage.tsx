@@ -118,9 +118,9 @@ export default function ReportDetailPage() {
 
   if (!isEditable) {
     return (
-      <div className="page p-6 md:p-8">
-        <div className="max-w-3xl mx-auto panel p-8 space-y-6">
-          <div className="flex justify-between items-center">
+      <div className="page p-4 sm:p-6 md:p-8">
+        <div className="max-w-3xl mx-auto panel p-4 sm:p-8 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             <div>
               <h1 className="page-title">
                 Week of {new Date(report.weekStartDate).toLocaleDateString()}
@@ -199,9 +199,9 @@ export default function ReportDetailPage() {
   }
 
   return (
-    <div className="page p-6 md:p-8">
-      <div className="max-w-4xl mx-auto panel p-8 space-y-8">
-        <div className="flex justify-between items-center">
+    <div className="page p-4 sm:p-6 md:p-8">
+      <div className="max-w-4xl mx-auto panel p-4 sm:p-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           <h1 className="page-title">Edit Weekly Report</h1>
           <span className={`badge ${statusBadge[report.status] ?? 'badge-neutral'}`}>
             {report.status}
@@ -230,7 +230,7 @@ export default function ReportDetailPage() {
             </select>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="field-label">Week start</label>
               <input
@@ -385,7 +385,7 @@ export default function ReportDetailPage() {
             </div>
             <div className="space-y-3">
               {nextWeekFields.fields.map((field, index) => (
-                <div key={field.id} className="grid grid-cols-2 gap-2 items-end">
+                <div key={field.id} className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:items-end">
                   <div>
                     <label className="field-label">Task name</label>
                     <input
@@ -404,7 +404,7 @@ export default function ReportDetailPage() {
                     <button
                       type="button"
                       onClick={() => nextWeekFields.remove(index)}
-                      className="link-danger pb-2.5"
+                      className="link-danger sm:pb-2.5"
                     >
                       Remove
                     </button>
@@ -427,7 +427,7 @@ export default function ReportDetailPage() {
             </div>
             <div className="space-y-3">
               {blockerFields.fields.map((field, index) => (
-                <div key={field.id} className="flex items-end gap-3">
+                <div key={field.id} className="flex flex-col sm:flex-row sm:items-end gap-2 sm:gap-3">
                   <div className="flex-1">
                     <label className="field-label">Description</label>
                     <input
@@ -435,7 +435,7 @@ export default function ReportDetailPage() {
                       className="input"
                     />
                   </div>
-                  <label className="flex items-center gap-1.5 text-ink text-sm whitespace-nowrap pb-2.5">
+                  <label className="flex items-center gap-1.5 text-ink text-sm whitespace-nowrap sm:pb-2.5">
                     <input
                       type="checkbox"
                       {...register(`blockers.${index}.isKeyIssue` as const)}
@@ -446,7 +446,7 @@ export default function ReportDetailPage() {
                   <button
                     type="button"
                     onClick={() => blockerFields.remove(index)}
-                    className="link-danger pb-2.5"
+                    className="link-danger sm:pb-2.5"
                   >
                     Remove
                   </button>
@@ -470,7 +470,7 @@ export default function ReportDetailPage() {
             </div>
             <div className="space-y-3">
               {achievementFields.fields.map((field, index) => (
-                <div key={field.id} className="flex items-end gap-3">
+                <div key={field.id} className="flex flex-col sm:flex-row sm:items-end gap-2 sm:gap-3">
                   <div className="flex-1">
                     <label className="field-label">Description</label>
                     <input
@@ -478,7 +478,7 @@ export default function ReportDetailPage() {
                       className="input"
                     />
                   </div>
-                  <label className="flex items-center gap-1.5 text-ink text-sm whitespace-nowrap pb-2.5">
+                  <label className="flex items-center gap-1.5 text-ink text-sm whitespace-nowrap sm:pb-2.5">
                     <input
                       type="checkbox"
                       {...register(`achievements.${index}.isKeyAchievement` as const)}
@@ -489,7 +489,7 @@ export default function ReportDetailPage() {
                   <button
                     type="button"
                     onClick={() => achievementFields.remove(index)}
-                    className="link-danger pb-2.5"
+                    className="link-danger sm:pb-2.5"
                   >
                     Remove
                   </button>
@@ -498,7 +498,7 @@ export default function ReportDetailPage() {
             </div>
           </section>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="field-label">Notes (optional)</label>
               <textarea {...register('notes')} className="input" rows={3} />
