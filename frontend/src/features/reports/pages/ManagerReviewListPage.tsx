@@ -7,11 +7,11 @@ import {
 import { getProjectsApi, type Project } from '../../projects/services/projectApi';
 import { getUsersApi, type UserSummary } from '../../users/services/userApi';
 
-const statusColors: Record<string, string> = {
-  Draft: 'bg-slate-500',
-  Submitted: 'bg-blue-500',
-  NeedsCorrection: 'bg-orange-500',
-  Approved: 'bg-green-600',
+const statusBadge: Record<string, string> = {
+  Draft: 'badge-neutral',
+  Submitted: 'badge-primary',
+  NeedsCorrection: 'badge-warning',
+  Approved: 'badge-success',
 };
 
 const filterTabs = ['All', 'Submitted', 'NeedsCorrection', 'Approved'] as const;
@@ -59,19 +59,22 @@ export default function ManagerReviewListPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
+    <div className="page p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold text-white mb-6">Team Reports — Review</h1>
+        <div className="mb-6">
+          <h1 className="page-title">Team Reports</h1>
+          <p className="text-ink-muted text-sm mt-0.5">Review and act on reports submitted by your team.</p>
+        </div>
 
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-2 mb-4 border-b border-border">
           {filterTabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+              className={`px-3 py-2 text-sm font-medium border-b-2 -mb-px transition ${
                 activeTab === tab
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-ink-muted hover:text-ink'
               }`}
             >
               {tab === 'NeedsCorrection' ? 'Needs Correction' : tab}
@@ -79,29 +82,29 @@ export default function ManagerReviewListPage() {
           ))}
         </div>
 
-        <div className="bg-slate-800 rounded-lg p-4 mb-6 grid grid-cols-2 md:grid-cols-5 gap-3 items-end">
+        <div className="panel p-4 mb-6 grid grid-cols-2 md:grid-cols-5 gap-3 items-end">
           <div>
-            <label className="block text-xs text-slate-400 mb-1">Member</label>
+            <label className="field-label">Member</label>
             <select
               value={memberFilter}
               onChange={(e) => setMemberFilter(e.target.value)}
-              className="w-full rounded-lg bg-slate-700 text-white px-2 py-2 text-sm"
+              className="input"
             >
               <option value="">All members</option>
               {members.map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.name}
+                  {m.firstName} {m.lastName}
                 </option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-xs text-slate-400 mb-1">Project</label>
+            <label className="field-label">Project</label>
             <select
               value={projectFilter}
               onChange={(e) => setProjectFilter(e.target.value)}
-              className="w-full rounded-lg bg-slate-700 text-white px-2 py-2 text-sm"
+              className="input"
             >
               <option value="">All projects</option>
               {projects.map((p) => (
@@ -113,61 +116,54 @@ export default function ManagerReviewListPage() {
           </div>
 
           <div>
-            <label className="block text-xs text-slate-400 mb-1">Week From</label>
+            <label className="field-label">Week from</label>
             <input
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full rounded-lg bg-slate-700 text-white px-2 py-2 text-sm"
+              className="input"
             />
           </div>
 
           <div>
-            <label className="block text-xs text-slate-400 mb-1">Week To</label>
+            <label className="field-label">Week to</label>
             <input
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="w-full rounded-lg bg-slate-700 text-white px-2 py-2 text-sm"
+              className="input"
             />
           </div>
 
-          <button
-            onClick={clearFilters}
-            className="text-slate-400 hover:text-white text-sm underline"
-          >
+          <button onClick={clearFilters} className="link-muted text-left pb-2.5">
             Clear filters
           </button>
         </div>
 
-        {loading && <p className="text-slate-400">Loading...</p>}
-        {error && <p className="text-red-400">{error}</p>}
+        {loading && <p className="text-ink-muted text-sm">Loading…</p>}
+        {error && <div className="alert alert-danger mb-4">{error}</div>}
         {!loading && !error && reports.length === 0 && (
-          <p className="text-slate-400">No reports found for this filter.</p>
+          <div className="panel p-8 text-center">
+            <p className="text-ink-muted text-sm">No reports found for this filter.</p>
+          </div>
         )}
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {reports.map((r) => (
             <Link
               key={r.id}
               to={`/manager/reports/${r.id}`}
-              className="block bg-slate-800 hover:bg-slate-700 rounded-lg p-4 flex justify-between items-center transition"
+              className="block panel p-4 flex justify-between items-center transition hover:border-border-strong"
             >
               <div>
-                <p className="text-white font-medium">{r.userName}</p>
-                <p className="text-slate-400 text-sm">
-                  {new Date(r.weekStartDate).toLocaleDateString()} -{' '}
+                <p className="text-ink font-medium text-sm">{r.userName}</p>
+                <p className="text-ink-muted text-sm mt-0.5">
+                  {new Date(r.weekStartDate).toLocaleDateString()} –{' '}
                   {new Date(r.weekEndDate).toLocaleDateString()}
                   {r.projectName && ` · ${r.projectName}`}
                 </p>
               </div>
-              <span
-                className={`text-white text-xs font-semibold px-3 py-1 rounded-full ${
-                  statusColors[r.status] ?? 'bg-slate-500'
-                }`}
-              >
-                {r.status}
-              </span>
+              <span className={`badge ${statusBadge[r.status] ?? 'badge-neutral'}`}>{r.status}</span>
             </Link>
           ))}
         </div>

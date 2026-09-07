@@ -6,10 +6,13 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   role: 'TeamMember' | 'Manager';
+  dateOfBirth?: string;
+  mobile?: string;
 }
 
 export interface LoginResponse {

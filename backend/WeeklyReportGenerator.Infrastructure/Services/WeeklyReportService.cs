@@ -145,7 +145,7 @@ public class WeeklyReportService : IWeeklyReportService
         {
             Id = r.Id,
             UserId = r.UserId,
-            UserName = r.User?.Name ?? string.Empty,
+            UserName = r.User?.FullName ?? string.Empty,
             WeekStartDate = r.WeekStartDate,
             WeekEndDate = r.WeekEndDate,
             Status = r.Status.ToString(),
@@ -269,7 +269,7 @@ public class WeeklyReportService : IWeeklyReportService
         {
             Id = report.Id,
             UserId = report.UserId,
-            UserName = report.User?.Name ?? string.Empty,
+            UserName = report.User?.FullName ?? string.Empty,
             ProjectId = report.ProjectId,
             ProjectName = report.Project?.Name,
             WeekStartDate = report.WeekStartDate,

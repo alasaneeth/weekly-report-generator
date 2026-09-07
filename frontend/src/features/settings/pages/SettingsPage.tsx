@@ -41,51 +41,56 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
-      <div className="max-w-md mx-auto bg-slate-800 rounded-xl p-8 shadow-lg space-y-5">
-        <h1 className="text-2xl font-bold text-white">Settings</h1>
+    <div className="page p-6 md:p-8">
+      <div className="max-w-md mx-auto space-y-6">
+        <h1 className="page-title">Settings</h1>
 
-        <div>
-          <h2 className="text-lg font-semibold text-white mb-3">Change Password</h2>
+        <div className="panel p-6 space-y-4">
+          <div>
+            <h2 className="section-title">Change password</h2>
+            <p className="text-ink-muted text-sm mt-0.5">
+              Use a password with at least 6 characters.
+            </p>
+          </div>
 
-          {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
-          {successMessage && <p className="text-green-400 text-sm mb-3">{successMessage}</p>}
+          {error && <div className="alert alert-danger">{error}</div>}
+          {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
           <div className="space-y-3">
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Current Password</label>
+              <label className="field-label">Current password</label>
               <input
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                className="input"
               />
             </div>
             <div>
-              <label className="block text-sm text-slate-300 mb-1">New Password</label>
+              <label className="field-label">New password</label>
               <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                className="input"
               />
             </div>
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Confirm New Password</label>
+              <label className="field-label">Confirm new password</label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                className="input"
               />
             </div>
 
             <button
               onClick={handleChangePassword}
               disabled={isSaving}
-              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold px-4 py-2 rounded-lg transition"
+              className="btn btn-primary"
             >
-              {isSaving ? 'Updating...' : 'Update Password'}
+              {isSaving ? 'Updating…' : 'Update password'}
             </button>
           </div>
         </div>

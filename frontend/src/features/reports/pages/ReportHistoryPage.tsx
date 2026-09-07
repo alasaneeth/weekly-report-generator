@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getMyReportHistoryApi, type ReportSummary } from '../services/reportApi';
 
-const statusColors: Record<string, string> = {
-  Draft: 'bg-slate-500',
-  Submitted: 'bg-blue-500',
-  NeedsCorrection: 'bg-orange-500',
-  Approved: 'bg-green-600',
+const statusBadge: Record<string, string> = {
+  Draft: 'badge-neutral',
+  Submitted: 'badge-primary',
+  NeedsCorrection: 'badge-warning',
+  Approved: 'badge-success',
 };
 
 export default function ReportHistoryPage() {
@@ -20,44 +20,40 @@ export default function ReportHistoryPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
+    <div className="page p-6 md:p-8">
       <div className="max-w-3xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-white">My Reports</h1>
-          <Link
-            to="/reports/new"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition"
-          >
+          <div>
+            <h1 className="page-title">My Reports</h1>
+            <p className="text-ink-muted text-sm mt-0.5">Your submitted and draft weekly reports.</p>
+          </div>
+          <Link to="/reports/new" className="btn btn-primary">
             + New Report
           </Link>
         </div>
 
-        {loading && <p className="text-slate-400">Loading...</p>}
+        {loading && <p className="text-ink-muted text-sm">Loading…</p>}
         {!loading && reports.length === 0 && (
-          <p className="text-slate-400">No reports yet. Create your first one!</p>
+          <div className="panel p-8 text-center">
+            <p className="text-ink-muted text-sm">No reports yet. Create your first one to get started.</p>
+          </div>
         )}
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {reports.map((r) => (
             <Link
               key={r.id}
               to={`/reports/${r.id}`}
-              className="block bg-slate-800 hover:bg-slate-700 rounded-lg p-4 flex justify-between items-center transition"
+              className="block panel p-4 flex justify-between items-center transition hover:border-border-strong"
             >
               <div>
-                <p className="text-white font-medium">
-                  {new Date(r.weekStartDate).toLocaleDateString()} -{' '}
+                <p className="text-ink font-medium text-sm">
+                  {new Date(r.weekStartDate).toLocaleDateString()} –{' '}
                   {new Date(r.weekEndDate).toLocaleDateString()}
                 </p>
-                {r.projectName && <p className="text-slate-400 text-sm">{r.projectName}</p>}
+                {r.projectName && <p className="text-ink-muted text-sm mt-0.5">{r.projectName}</p>}
               </div>
-              <span
-                className={`text-white text-xs font-semibold px-3 py-1 rounded-full ${
-                  statusColors[r.status] ?? 'bg-slate-500'
-                }`}
-              >
-                {r.status}
-              </span>
+              <span className={`badge ${statusBadge[r.status] ?? 'badge-neutral'}`}>{r.status}</span>
             </Link>
           ))}
         </div>

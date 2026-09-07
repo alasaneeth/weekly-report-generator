@@ -10,9 +10,9 @@ import ReportDetailPage from '../features/reports/pages/ReportDetailPage';
 import ManagerReviewListPage from '../features/reports/pages/ManagerReviewListPage';
 import ManagerReviewDetailPage from '../features/reports/pages/ManagerReviewDetailPage';
 import ProjectsManagementPage from '../features/projects/pages/ProjectsManagementPage';
-import InsightsDashboardPage from '../features/dashboard/pages/InsightsDashboardPage';
 import ProfilePage from '../features/profile/pages/ProfilePage';
 import SettingsPage from '../features/settings/pages/SettingsPage';
+import UsersManagementPage from '../features/users/pages/UsersManagementPage';
 
 export default function AppRoutes() {
   return (
@@ -21,23 +21,25 @@ export default function AppRoutes() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
+        {/* Shared — any authenticated user */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
-            <Route path="/" element={<DashboardPage />} />
             <Route path="/reports/new" element={<ReportFormPage />} />
             <Route path="/reports/history" element={<ReportHistoryPage />} />
             <Route path="/reports/:id" element={<ReportDetailPage />} />
+            <Route path="/users" element={<UsersManagementPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
         </Route>
 
-        <Route element={<ProtectedRoute allowedRoles={['Manager']} />}>
+        {/* Manager only — Dashboard (with Insights merged in), Review, Projects */}
+        <Route element={<ProtectedRoute allowedRoles={['Manager']} redirectTo="/reports/history" />}>
           <Route element={<AppLayout />}>
+            <Route path="/" element={<DashboardPage />} />
             <Route path="/manager/reports" element={<ManagerReviewListPage />} />
             <Route path="/manager/reports/:id" element={<ManagerReviewDetailPage />} />
             <Route path="/projects" element={<ProjectsManagementPage />} />
-            <Route path="/insights" element={<InsightsDashboardPage />} />
           </Route>
         </Route>
 

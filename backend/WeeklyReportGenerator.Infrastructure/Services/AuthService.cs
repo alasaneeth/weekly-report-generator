@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using WeeklyReportGenerator.Application.Common.Interfaces;
 using WeeklyReportGenerator.Application.DTOs.Auth;
 using WeeklyReportGenerator.Domain.Entities;
@@ -31,9 +31,12 @@ public class AuthService : IAuthService
         var user = new User
         {
             Id = Guid.NewGuid(),
-            Name = request.Name,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
             Email = request.Email,
             Role = parsedRole,
+            DateOfBirth = request.DateOfBirth,
+            Mobile = request.Mobile,
             IsActive = true,
             CreatedAt = DateTime.UtcNow
         };
@@ -111,7 +114,7 @@ public class AuthService : IAuthService
         {
             AccessToken = accessToken,
             RefreshToken = refreshTokenValue,
-            Name = user.Name,
+            Name = user.FullName,
             Email = user.Email,
             Role = user.Role.ToString(),
             ExpiresAt = _jwtService.GetAccessTokenExpiry()

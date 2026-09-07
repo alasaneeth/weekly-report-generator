@@ -22,7 +22,7 @@ export default function RegisterPage() {
 
     try {
       await registerApi(data);
-      setSuccessMessage('Registration successful! Redirecting to login...');
+      setSuccessMessage('Registration successful! Redirecting to login…');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err: any) {
       setApiError(err.response?.data?.message ?? 'Registration failed. Please try again.');
@@ -32,77 +32,109 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900 px-4">
-      <div className="w-full max-w-sm bg-slate-800 rounded-xl p-8 shadow-lg">
-        <h1 className="text-2xl font-bold text-white mb-6 text-center">Create Account</h1>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm text-slate-300 mb-1">Full Name</label>
-            <input
-              type="text"
-              {...register('name', { required: 'Name is required' })}
-              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name.message}</p>}
+    <div className="min-h-screen flex items-center justify-center bg-bg px-4 py-10">
+      <div className="w-full max-w-sm">
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-white text-sm font-bold">
+            W
           </div>
+          <span className="font-semibold text-ink tracking-tight">WorkLog</span>
+        </div>
 
-          <div>
-            <label className="block text-sm text-slate-300 mb-1">Email</label>
-            <input
-              type="email"
-              {...register('email', { required: 'Email is required' })}
-              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
-          </div>
+        <div className="panel p-8">
+          <h1 className="page-title text-center mb-1">Create account</h1>
+          <p className="text-ink-muted text-sm text-center mb-6">
+            Set up access to start submitting weekly reports.
+          </p>
 
-          <div>
-            <label className="block text-sm text-slate-300 mb-1">Password</label>
-            <input
-              type="password"
-              {...register('password', {
-                required: 'Password is required',
-                minLength: { value: 6, message: 'Password must be at least 6 characters' },
-              })}
-              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {errors.password && (
-              <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
-            )}
-          </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="field-label">First name</label>
+                <input
+                  {...register('firstName', { required: 'First name is required' })}
+                  className="input"
+                />
+                {errors.firstName && (
+                  <p className="text-danger text-xs mt-1">{errors.firstName.message}</p>
+                )}
+              </div>
+              <div>
+                <label className="field-label">Last name</label>
+                <input
+                  {...register('lastName', { required: 'Last name is required' })}
+                  className="input"
+                />
+                {errors.lastName && (
+                  <p className="text-danger text-xs mt-1">{errors.lastName.message}</p>
+                )}
+              </div>
+            </div>
 
-          <div>
-            <label className="block text-sm text-slate-300 mb-1">Role</label>
-            <select
-              {...register('role', { required: 'Role is required' })}
-              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Select a role</option>
-              <option value="TeamMember">Team Member</option>
-              <option value="Manager">Manager</option>
-            </select>
-            {errors.role && <p className="text-red-400 text-sm mt-1">{errors.role.message}</p>}
-          </div>
+            <div>
+              <label className="field-label">Email</label>
+              <input
+                type="email"
+                {...register('email', { required: 'Email is required' })}
+                className="input"
+              />
+              {errors.email && <p className="text-danger text-xs mt-1">{errors.email.message}</p>}
+            </div>
 
-          {apiError && <p className="text-red-400 text-sm">{apiError}</p>}
-          {successMessage && <p className="text-green-400 text-sm">{successMessage}</p>}
+            <div>
+              <label className="field-label">Password</label>
+              <input
+                type="password"
+                {...register('password', {
+                  required: 'Password is required',
+                  minLength: { value: 6, message: 'Password must be at least 6 characters' },
+                })}
+                className="input"
+              />
+              {errors.password && (
+                <p className="text-danger text-xs mt-1">{errors.password.message}</p>
+              )}
+            </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-2 rounded-lg transition"
-          >
-            {isSubmitting ? 'Creating account...' : 'Register'}
-          </button>
-        </form>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="field-label">Date of birth</label>
+                <input type="date" {...register('dateOfBirth')} className="input" />
+              </div>
+              <div>
+                <label className="field-label">Mobile</label>
+                <input {...register('mobile')} className="input" />
+              </div>
+            </div>
 
-        <p className="text-slate-400 text-sm text-center mt-4">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-400 hover:underline">
-            Sign In
-          </Link>
-        </p>
+            <div>
+              <label className="field-label">Role</label>
+              <select
+                {...register('role', { required: 'Role is required' })}
+                className="input"
+              >
+                <option value="">Select a role</option>
+                <option value="TeamMember">Team Member</option>
+                <option value="Manager">Manager</option>
+              </select>
+              {errors.role && <p className="text-danger text-xs mt-1">{errors.role.message}</p>}
+            </div>
+
+            {apiError && <div className="alert alert-danger">{apiError}</div>}
+            {successMessage && <div className="alert alert-success">{successMessage}</div>}
+
+            <button type="submit" disabled={isSubmitting} className="btn btn-primary w-full">
+              {isSubmitting ? 'Creating account…' : 'Register'}
+            </button>
+          </form>
+
+          <p className="text-ink-muted text-sm text-center mt-5">
+            Already have an account?{' '}
+            <Link to="/login" className="link-action">
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

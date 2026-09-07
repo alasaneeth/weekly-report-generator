@@ -10,6 +10,13 @@ import {
 } from '../services/reportApi';
 import { getProjectsApi, type Project } from '../../projects/services/projectApi';
 
+const statusBadge: Record<string, string> = {
+  Draft: 'badge-neutral',
+  Submitted: 'badge-primary',
+  NeedsCorrection: 'badge-warning',
+  Approved: 'badge-success',
+};
+
 export default function ReportDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -19,7 +26,13 @@ export default function ReportDetailPage() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  const { register, control, handleSubmit, reset } = useForm<SaveReportInput>();
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<SaveReportInput>();
   const taskFields = useFieldArray({ control, name: 'tasks' });
   const nextWeekFields = useFieldArray({ control, name: 'nextWeekTasks' });
   const blockerFields = useFieldArray({ control, name: 'blockers' });
@@ -54,6 +67,10 @@ export default function ReportDetailPage() {
 
   const isEditable = report?.status === 'Draft' || report?.status === 'NeedsCorrection';
 
+  const onInvalid = () => {
+    setApiError('Please fix the highlighted fields below before continuing.');
+  };
+
   const saveChanges = async (data: SaveReportInput) => {
     if (!id) return;
     setIsSaving(true);
@@ -85,96 +102,96 @@ export default function ReportDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <p className="text-slate-400">Loading...</p>
+      <div className="page flex items-center justify-center">
+        <p className="text-ink-muted text-sm">Loading…</p>
       </div>
     );
   }
 
   if (!report) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <p className="text-red-400">Report not found.</p>
+      <div className="page flex items-center justify-center">
+        <p className="text-danger text-sm">Report not found.</p>
       </div>
     );
   }
 
   if (!isEditable) {
     return (
-      <div className="min-h-screen bg-slate-900 p-6">
-        <div className="max-w-3xl mx-auto bg-slate-800 rounded-xl p-8 shadow-lg space-y-6">
+      <div className="page p-6 md:p-8">
+        <div className="max-w-3xl mx-auto panel p-8 space-y-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="page-title">
                 Week of {new Date(report.weekStartDate).toLocaleDateString()}
               </h1>
               {report.projectName && (
-                <p className="text-slate-400 text-sm">{report.projectName}</p>
+                <p className="text-ink-muted text-sm mt-0.5">{report.projectName}</p>
               )}
             </div>
-            <span className="bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+            <span className={`badge ${statusBadge[report.status] ?? 'badge-neutral'}`}>
               {report.status}
             </span>
           </div>
 
           {report.managerComment && (
-            <div className="bg-orange-900/40 border border-orange-500 rounded-lg p-3">
-              <p className="text-orange-300 text-sm font-semibold">Manager Comment</p>
-              <p className="text-orange-100 text-sm">{report.managerComment}</p>
+            <div className="alert alert-warning">
+              <p className="alert-title">Manager comment</p>
+              <p>{report.managerComment}</p>
             </div>
           )}
 
           <section>
-            <h2 className="text-lg font-semibold text-white mb-2">Tasks Completed</h2>
+            <h2 className="section-title mb-2">Tasks completed</h2>
             <div className="space-y-2">
               {report.tasks.map((t, i) => (
-                <div key={i} className="bg-slate-700 rounded-lg p-3 text-sm text-slate-200">
-                  <p className="font-medium text-white">{t.taskName}</p>
-                  <p>
+                <div key={i} className="subpanel p-3 text-sm text-ink-muted">
+                  <p className="font-medium text-ink">{t.taskName}</p>
+                  <p className="mt-0.5">
                     Priority: {t.priority} · Status: {t.status} · Planned {t.plannedPercentage}% /
                     Actual {t.actualPercentage}% · {t.timeSpentHours}h spent of {t.timePlannedHours}h
                   </p>
-                  {t.deliverable && <p>Deliverable: {t.deliverable}</p>}
+                  {t.deliverable && <p className="mt-0.5">Deliverable: {t.deliverable}</p>}
                 </div>
               ))}
             </div>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-white mb-2">Next Week</h2>
+            <h2 className="section-title mb-2">Next week</h2>
             {report.nextWeekTasks.map((n, i) => (
-              <p key={i} className="text-slate-300 text-sm">
+              <p key={i} className="text-ink-muted text-sm">
                 • {n.taskName} {n.description && `— ${n.description}`}
               </p>
             ))}
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-white mb-2">Blockers</h2>
-            {report.blockers.length === 0 && <p className="text-slate-500 text-sm">None</p>}
+            <h2 className="section-title mb-2">Blockers</h2>
+            {report.blockers.length === 0 && <p className="text-ink-subtle text-sm">None</p>}
             {report.blockers.map((b, i) => (
-              <p key={i} className="text-slate-300 text-sm">
-                • {b.description} {b.isKeyIssue && <span className="text-red-400">(Key Issue)</span>}
+              <p key={i} className="text-ink-muted text-sm">
+                • {b.description}{' '}
+                {b.isKeyIssue && <span className="badge badge-warning ml-1">Key issue</span>}
               </p>
             ))}
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-white mb-2">Achievements</h2>
-            {report.achievements.length === 0 && <p className="text-slate-500 text-sm">None</p>}
+            <h2 className="section-title mb-2">Achievements</h2>
+            {report.achievements.length === 0 && <p className="text-ink-subtle text-sm">None</p>}
             {report.achievements.map((a, i) => (
-              <p key={i} className="text-slate-300 text-sm">
+              <p key={i} className="text-ink-muted text-sm">
                 • {a.description}{' '}
-                {a.isKeyAchievement && <span className="text-green-400">(Key Achievement)</span>}
+                {a.isKeyAchievement && (
+                  <span className="badge badge-success ml-1">Key achievement</span>
+                )}
               </p>
             ))}
           </section>
 
-          <button
-            onClick={() => navigate('/reports/history')}
-            className="text-blue-400 hover:underline text-sm"
-          >
-            ← Back to My Reports
+          <button onClick={() => navigate('/reports/history')} className="link-action">
+            ← Back to my reports
           </button>
         </div>
       </div>
@@ -182,31 +199,28 @@ export default function ReportDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
-      <div className="max-w-4xl mx-auto bg-slate-800 rounded-xl p-8 shadow-lg space-y-8">
+    <div className="page p-6 md:p-8">
+      <div className="max-w-4xl mx-auto panel p-8 space-y-8">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-white">Edit Weekly Report</h1>
-          <span className="bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+          <h1 className="page-title">Edit Weekly Report</h1>
+          <span className={`badge ${statusBadge[report.status] ?? 'badge-neutral'}`}>
             {report.status}
           </span>
         </div>
 
         {report.managerComment && (
-          <div className="bg-orange-900/40 border border-orange-500 rounded-lg p-3">
-            <p className="text-orange-300 text-sm font-semibold">Manager requested changes:</p>
-            <p className="text-orange-100 text-sm">{report.managerComment}</p>
+          <div className="alert alert-warning">
+            <p className="alert-title">Manager requested changes</p>
+            <p>{report.managerComment}</p>
           </div>
         )}
 
-        {apiError && <p className="text-red-400 text-sm">{apiError}</p>}
+        {apiError && <div className="alert alert-danger">{apiError}</div>}
 
         <form className="space-y-8">
           <div>
-            <label className="block text-sm text-slate-300 mb-1">Project (optional)</label>
-            <select
-              {...register('projectId')}
-              className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
-            >
+            <label className="field-label">Project (optional)</label>
+            <select {...register('projectId')} className="input">
               <option value="">No project</option>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -218,26 +232,32 @@ export default function ReportDetailPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Week Start</label>
+              <label className="field-label">Week start</label>
               <input
                 type="date"
-                {...register('weekStartDate', { required: true })}
-                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+                {...register('weekStartDate', { required: 'Week start date is required.' })}
+                className="input"
               />
+              {errors.weekStartDate && (
+                <p className="text-danger text-xs mt-1">{errors.weekStartDate.message}</p>
+              )}
             </div>
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Week End</label>
+              <label className="field-label">Week end</label>
               <input
                 type="date"
-                {...register('weekEndDate', { required: true })}
-                className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+                {...register('weekEndDate', { required: 'Week end date is required.' })}
+                className="input"
               />
+              {errors.weekEndDate && (
+                <p className="text-danger text-xs mt-1">{errors.weekEndDate.message}</p>
+              )}
             </div>
           </div>
 
           <section>
             <div className="flex justify-between items-center mb-3">
-              <h2 className="text-lg font-semibold text-white">Tasks Completed</h2>
+              <h2 className="section-title">Tasks completed</h2>
               <button
                 type="button"
                 onClick={() =>
@@ -252,27 +272,34 @@ export default function ReportDetailPage() {
                     deliverable: '',
                   })
                 }
-                className="text-blue-400 hover:underline text-sm"
+                className="link-action"
               >
-                + Add Task
+                + Add task
               </button>
             </div>
             <div className="space-y-4">
               {taskFields.fields.map((field, index) => (
-                <div key={field.id} className="bg-slate-700 rounded-lg p-4 space-y-3">
+                <div key={field.id} className="subpanel p-4 space-y-3">
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">Task Name</label>
+                    <label className="field-label">Task name</label>
                     <input
-                      {...register(`tasks.${index}.taskName` as const, { required: true })}
-                      className="w-full rounded-lg bg-slate-600 text-white px-3 py-2"
+                      {...register(`tasks.${index}.taskName` as const, {
+                        required: 'Task name is required.',
+                      })}
+                      className="input"
                     />
+                    {errors.tasks?.[index]?.taskName && (
+                      <p className="text-danger text-xs mt-1">
+                        {errors.tasks[index]?.taskName?.message}
+                      </p>
+                    )}
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Priority</label>
+                      <label className="field-label">Priority</label>
                       <select
                         {...register(`tasks.${index}.priority` as const)}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       >
                         <option value="Low">Low</option>
                         <option value="Medium">Medium</option>
@@ -280,10 +307,10 @@ export default function ReportDetailPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Status</label>
+                      <label className="field-label">Status</label>
                       <select
                         {...register(`tasks.${index}.status` as const)}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       >
                         <option value="NotStarted">Not Started</option>
                         <option value="InProgress">In Progress</option>
@@ -292,42 +319,42 @@ export default function ReportDetailPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Planned %</label>
+                      <label className="field-label">Planned %</label>
                       <input
                         type="number"
                         {...register(`tasks.${index}.plannedPercentage` as const, { valueAsNumber: true })}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Actual %</label>
+                      <label className="field-label">Actual %</label>
                       <input
                         type="number"
                         {...register(`tasks.${index}.actualPercentage` as const, { valueAsNumber: true })}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Time Planned (hrs)</label>
+                      <label className="field-label">Time planned (hrs)</label>
                       <input
                         type="number"
                         {...register(`tasks.${index}.timePlannedHours` as const, { valueAsNumber: true })}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Time Spent (hrs)</label>
+                      <label className="field-label">Time spent (hrs)</label>
                       <input
                         type="number"
                         {...register(`tasks.${index}.timeSpentHours` as const, { valueAsNumber: true })}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       />
                     </div>
                     <div className="col-span-2">
-                      <label className="block text-xs text-slate-400 mb-1">Deliverable</label>
+                      <label className="field-label">Deliverable</label>
                       <input
                         {...register(`tasks.${index}.deliverable` as const)}
-                        className="w-full rounded-lg bg-slate-600 text-white px-2 py-2"
+                        className="input"
                       />
                     </div>
                   </div>
@@ -335,7 +362,7 @@ export default function ReportDetailPage() {
                     <button
                       type="button"
                       onClick={() => taskFields.remove(index)}
-                      className="text-red-400 text-xs hover:underline"
+                      className="link-danger"
                     >
                       Remove task
                     </button>
@@ -347,11 +374,11 @@ export default function ReportDetailPage() {
 
           <section>
             <div className="flex justify-between items-center mb-3">
-              <h2 className="text-lg font-semibold text-white">Planned for Next Week</h2>
+              <h2 className="section-title">Planned for next week</h2>
               <button
                 type="button"
                 onClick={() => nextWeekFields.append({ taskName: '', description: '' })}
-                className="text-blue-400 hover:underline text-sm"
+                className="link-action"
               >
                 + Add
               </button>
@@ -360,26 +387,26 @@ export default function ReportDetailPage() {
               {nextWeekFields.fields.map((field, index) => (
                 <div key={field.id} className="grid grid-cols-2 gap-2 items-end">
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">Task Name</label>
+                    <label className="field-label">Task name</label>
                     <input
                       {...register(`nextWeekTasks.${index}.taskName` as const)}
-                      className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+                      className="input"
                     />
                   </div>
                   <div className="flex gap-2 items-end">
                     <div className="flex-1">
-                      <label className="block text-xs text-slate-400 mb-1">Description (optional)</label>
+                      <label className="field-label">Description (optional)</label>
                       <input
                         {...register(`nextWeekTasks.${index}.description` as const)}
-                        className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+                        className="input"
                       />
                     </div>
                     <button
                       type="button"
                       onClick={() => nextWeekFields.remove(index)}
-                      className="text-red-400 text-sm pb-2"
+                      className="link-danger pb-2.5"
                     >
-                      ✕
+                      Remove
                     </button>
                   </div>
                 </div>
@@ -389,35 +416,39 @@ export default function ReportDetailPage() {
 
           <section>
             <div className="flex justify-between items-center mb-3">
-              <h2 className="text-lg font-semibold text-white">Blockers</h2>
+              <h2 className="section-title">Blockers</h2>
               <button
                 type="button"
                 onClick={() => blockerFields.append({ description: '', isKeyIssue: false })}
-                className="text-blue-400 hover:underline text-sm"
+                className="link-action"
               >
-                + Add Blocker
+                + Add blocker
               </button>
             </div>
             <div className="space-y-3">
               {blockerFields.fields.map((field, index) => (
-                <div key={field.id} className="flex items-end gap-2">
+                <div key={field.id} className="flex items-end gap-3">
                   <div className="flex-1">
-                    <label className="block text-xs text-slate-400 mb-1">Description</label>
+                    <label className="field-label">Description</label>
                     <input
                       {...register(`blockers.${index}.description` as const)}
-                      className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+                      className="input"
                     />
                   </div>
-                  <label className="flex items-center gap-1 text-slate-300 text-sm whitespace-nowrap pb-2">
-                    <input type="checkbox" {...register(`blockers.${index}.isKeyIssue` as const)} />
-                    Key Issue
+                  <label className="flex items-center gap-1.5 text-ink text-sm whitespace-nowrap pb-2.5">
+                    <input
+                      type="checkbox"
+                      {...register(`blockers.${index}.isKeyIssue` as const)}
+                      className="checkbox"
+                    />
+                    Key issue
                   </label>
                   <button
                     type="button"
                     onClick={() => blockerFields.remove(index)}
-                    className="text-red-400 text-sm pb-2"
+                    className="link-danger pb-2.5"
                   >
-                    ✕
+                    Remove
                   </button>
                 </div>
               ))}
@@ -426,40 +457,41 @@ export default function ReportDetailPage() {
 
           <section>
             <div className="flex justify-between items-center mb-3">
-              <h2 className="text-lg font-semibold text-white">Achievements</h2>
+              <h2 className="section-title">Achievements</h2>
               <button
                 type="button"
                 onClick={() =>
                   achievementFields.append({ description: '', isKeyAchievement: false })
                 }
-                className="text-blue-400 hover:underline text-sm"
+                className="link-action"
               >
-                + Add Achievement
+                + Add achievement
               </button>
             </div>
             <div className="space-y-3">
               {achievementFields.fields.map((field, index) => (
-                <div key={field.id} className="flex items-end gap-2">
+                <div key={field.id} className="flex items-end gap-3">
                   <div className="flex-1">
-                    <label className="block text-xs text-slate-400 mb-1">Description</label>
+                    <label className="field-label">Description</label>
                     <input
                       {...register(`achievements.${index}.description` as const)}
-                      className="w-full rounded-lg bg-slate-700 text-white px-3 py-2"
+                      className="input"
                     />
                   </div>
-                  <label className="flex items-center gap-1 text-slate-300 text-sm whitespace-nowrap pb-2">
+                  <label className="flex items-center gap-1.5 text-ink text-sm whitespace-nowrap pb-2.5">
                     <input
                       type="checkbox"
                       {...register(`achievements.${index}.isKeyAchievement` as const)}
+                      className="checkbox"
                     />
-                    Key Achievement
+                    Key achievement
                   </label>
                   <button
                     type="button"
                     onClick={() => achievementFields.remove(index)}
-                    className="text-red-400 text-sm pb-2"
+                    className="link-danger pb-2.5"
                   >
-                    ✕
+                    Remove
                   </button>
                 </div>
               ))}
@@ -468,31 +500,31 @@ export default function ReportDetailPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Notes (optional)</label>
-              <textarea {...register('notes')} className="w-full rounded-lg bg-slate-700 text-white px-3 py-2" rows={3} />
+              <label className="field-label">Notes (optional)</label>
+              <textarea {...register('notes')} className="input" rows={3} />
             </div>
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Links (optional)</label>
-              <textarea {...register('links')} className="w-full rounded-lg bg-slate-700 text-white px-3 py-2" rows={3} />
+              <label className="field-label">Links (optional)</label>
+              <textarea {...register('links')} className="input" rows={3} />
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-3 border-t border-border pt-6">
             <button
               type="button"
               disabled={isSaving}
-              onClick={handleSubmit(saveChanges)}
-              className="bg-slate-600 hover:bg-slate-500 disabled:opacity-50 text-white font-semibold px-4 py-2 rounded-lg transition"
+              onClick={handleSubmit(saveChanges, onInvalid)}
+              className="btn btn-secondary"
             >
-              Save Changes
+              Save changes
             </button>
             <button
               type="button"
               disabled={isSaving}
-              onClick={handleSubmit(saveAndSubmit)}
-              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold px-4 py-2 rounded-lg transition"
+              onClick={handleSubmit(saveAndSubmit, onInvalid)}
+              className="btn btn-primary"
             >
-              Save &amp; Submit
+              Save &amp; submit
             </button>
           </div>
         </form>
