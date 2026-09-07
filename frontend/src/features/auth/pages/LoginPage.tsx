@@ -50,7 +50,7 @@ export default function LoginPage() {
           <span className="font-semibold text-ink tracking-tight">WorkLog</span>
         </div>
 
-        <div className="panel p-8">
+        <div className="panel p-4 sm:p-8">
           <h1 className="page-title text-center mb-1">Sign in</h1>
           <p className="text-ink-muted text-sm text-center mb-6">
             Enter your details to access your reports.

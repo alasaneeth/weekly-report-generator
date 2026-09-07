@@ -119,9 +119,9 @@ export default function UsersManagementPage() {
   };
 
   return (
-    <div className="page p-6 md:p-8">
+    <div className="page p-4 sm:p-6 md:p-8">
       <div className="max-w-3xl mx-auto space-y-6">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           <h1 className="page-title">Team Members</h1>
           {isManager && (
             <button
@@ -142,7 +142,7 @@ export default function UsersManagementPage() {
         {isManager && showCreateForm && (
           <div className="panel p-6 space-y-3">
             <h2 className="section-title">New user</h2>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <input
                   placeholder="First Name"
@@ -224,7 +224,7 @@ export default function UsersManagementPage() {
           {users.map((u) =>
             editingId === u.id && editForm ? (
               <div key={u.id} className="panel p-4 space-y-3">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input
                     value={editForm.firstName}
                     onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
@@ -287,7 +287,7 @@ export default function UsersManagementPage() {
                 </div>
               </div>
             ) : (
-              <div key={u.id} className="panel p-4 flex justify-between items-center">
+              <div key={u.id} className="panel p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                 <div>
                   <p className="text-ink font-medium text-sm">
                     {u.firstName} {u.lastName}{' '}

@@ -85,7 +85,7 @@ export default function DashboardPage() {
   }));
 
   return (
-    <div className="page p-6 md:p-8">
+    <div className="page p-4 sm:p-6 md:p-8">
       <div className="max-w-6xl mx-auto space-y-6">
         <div>
           <h1 className="page-title">Team Insights</h1>
@@ -116,7 +116,7 @@ export default function DashboardPage() {
                 {memberStatusData.map((m, i) => (
                   <div
                     key={i}
-                    className="flex justify-between items-center py-1.5 border-b border-border last:border-0"
+                    className="flex flex-wrap justify-between items-center gap-x-2 gap-y-1 py-1.5 border-b border-border last:border-0"
                   >
                     <span className="text-ink text-sm">{m.name}</span>
                     <span className={`badge ${statusBadgeMap[m.status] ?? 'badge-neutral'}`}>
@@ -202,7 +202,7 @@ export default function DashboardPage() {
                 {charts.recentActivity.map((a, i) => (
                   <div
                     key={i}
-                    className="flex justify-between items-center py-1.5 border-b border-border last:border-0 text-sm"
+                    className="flex flex-wrap justify-between items-center gap-x-2 gap-y-1 py-1.5 border-b border-border last:border-0 text-sm"
                   >
                     <span className="text-ink">
                       {a.userName}{' '}
