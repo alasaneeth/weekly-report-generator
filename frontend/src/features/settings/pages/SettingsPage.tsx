@@ -41,7 +41,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="page p-6 md:p-8">
+    <div className="page p-4 sm:p-6 md:p-8">
       <div className="max-w-md mx-auto space-y-6">
         <h1 className="page-title">Settings</h1>
 

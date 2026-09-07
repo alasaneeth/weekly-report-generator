@@ -58,7 +58,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="page p-6 md:p-8">
+    <div className="page p-4 sm:p-6 md:p-8">
       <div className="max-w-md mx-auto space-y-6">
         <h1 className="page-title">My Profile</h1>
 
@@ -66,7 +66,7 @@ export default function ProfilePage() {
           {error && <div className="alert alert-danger">{error}</div>}
           {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="field-label">First name</label>
               <input
@@ -90,7 +90,7 @@ export default function ProfilePage() {
             <input value={profile?.email ?? ''} disabled className="input" />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="field-label">Date of birth</label>
               <input
