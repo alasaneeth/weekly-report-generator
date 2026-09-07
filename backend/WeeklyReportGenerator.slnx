@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="WeeklyReportGenerator.API/WeeklyReportGenerator.API.csproj" />
+  <Project Path="WeeklyReportGenerator.Application/WeeklyReportGenerator.Application.csproj" />
+  <Project Path="WeeklyReportGenerator.Domain/WeeklyReportGenerator.Domain.csproj" />
+  <Project Path="WeeklyReportGenerator.Infrastructure/WeeklyReportGenerator.Infrastructure.csproj" />
+</Solution>
