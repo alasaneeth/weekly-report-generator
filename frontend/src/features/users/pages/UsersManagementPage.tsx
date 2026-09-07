@@ -29,6 +29,7 @@ export default function UsersManagementPage() {
 
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [createForm, setCreateForm] = useState<CreateUserInput>(emptyCreateForm);
+  const [createFieldErrors, setCreateFieldErrors] = useState<Record<string, string>>({});
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<UpdateUserInput | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -45,10 +46,33 @@ export default function UsersManagementPage() {
     loadUsers();
   }, []);
 
+  const validateCreateForm = (): boolean => {
+    const fieldErrors: Record<string, string> = {};
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!createForm.firstName.trim()) fieldErrors.firstName = 'First name is required.';
+    if (!createForm.lastName.trim()) fieldErrors.lastName = 'Last name is required.';
+
+    if (!createForm.email.trim()) {
+      fieldErrors.email = 'Email is required.';
+    } else if (!emailPattern.test(createForm.email.trim())) {
+      fieldErrors.email = 'Enter a valid email address.';
+    }
+
+    if (!createForm.password) {
+      fieldErrors.password = 'Password is required.';
+    } else if (createForm.password.length < 6) {
+      fieldErrors.password = 'Password must be at least 6 characters.';
+    }
+
+    setCreateFieldErrors(fieldErrors);
+    return Object.keys(fieldErrors).length === 0;
+  };
+
   const handleCreate = async () => {
     setError(null);
-    if (!createForm.firstName || !createForm.lastName || !createForm.email || !createForm.password) {
-      setError('First name, last name, email, and password are required.');
+    if (!validateCreateForm()) {
+      setError('Please fix the highlighted fields below.');
       return;
     }
     setIsSaving(true);
@@ -56,6 +80,7 @@ export default function UsersManagementPage() {
       await createUserApi(createForm);
       setShowCreateForm(false);
       setCreateForm(emptyCreateForm);
+      setCreateFieldErrors({});
       loadUsers();
     } catch (err: any) {
       setError(err.response?.data?.message ?? 'Failed to create user.');
@@ -100,7 +125,11 @@ export default function UsersManagementPage() {
           <h1 className="page-title">Team Members</h1>
           {isManager && (
             <button
-              onClick={() => setShowCreateForm(!showCreateForm)}
+              onClick={() => {
+                setShowCreateForm(!showCreateForm);
+                setCreateFieldErrors({});
+                setError(null);
+              }}
               className="btn btn-primary"
             >
               {showCreateForm ? 'Cancel' : '+ New User'}
@@ -114,31 +143,51 @@ export default function UsersManagementPage() {
           <div className="panel p-6 space-y-3">
             <h2 className="section-title">New user</h2>
             <div className="grid grid-cols-2 gap-3">
-              <input
-                placeholder="First Name"
-                value={createForm.firstName}
-                onChange={(e) => setCreateForm({ ...createForm, firstName: e.target.value })}
-                className="input"
-              />
-              <input
-                placeholder="Last Name"
-                value={createForm.lastName}
-                onChange={(e) => setCreateForm({ ...createForm, lastName: e.target.value })}
-                className="input"
-              />
-              <input
-                placeholder="Email"
-                value={createForm.email}
-                onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
-                className="input"
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={createForm.password}
-                onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
-                className="input"
-              />
+              <div>
+                <input
+                  placeholder="First Name"
+                  value={createForm.firstName}
+                  onChange={(e) => setCreateForm({ ...createForm, firstName: e.target.value })}
+                  className="input"
+                />
+                {createFieldErrors.firstName && (
+                  <p className="text-danger text-xs mt-1">{createFieldErrors.firstName}</p>
+                )}
+              </div>
+              <div>
+                <input
+                  placeholder="Last Name"
+                  value={createForm.lastName}
+                  onChange={(e) => setCreateForm({ ...createForm, lastName: e.target.value })}
+                  className="input"
+                />
+                {createFieldErrors.lastName && (
+                  <p className="text-danger text-xs mt-1">{createFieldErrors.lastName}</p>
+                )}
+              </div>
+              <div>
+                <input
+                  placeholder="Email"
+                  value={createForm.email}
+                  onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
+                  className="input"
+                />
+                {createFieldErrors.email && (
+                  <p className="text-danger text-xs mt-1">{createFieldErrors.email}</p>
+                )}
+              </div>
+              <div>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={createForm.password}
+                  onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
+                  className="input"
+                />
+                {createFieldErrors.password && (
+                  <p className="text-danger text-xs mt-1">{createFieldErrors.password}</p>
+                )}
+              </div>
               <input
                 type="date"
                 value={createForm.dateOfBirth ?? ''}

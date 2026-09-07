@@ -26,7 +26,13 @@ export default function ReportDetailPage() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  const { register, control, handleSubmit, reset } = useForm<SaveReportInput>();
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<SaveReportInput>();
   const taskFields = useFieldArray({ control, name: 'tasks' });
   const nextWeekFields = useFieldArray({ control, name: 'nextWeekTasks' });
   const blockerFields = useFieldArray({ control, name: 'blockers' });
@@ -60,6 +66,10 @@ export default function ReportDetailPage() {
   }, [id, reset]);
 
   const isEditable = report?.status === 'Draft' || report?.status === 'NeedsCorrection';
+
+  const onInvalid = () => {
+    setApiError('Please fix the highlighted fields below before continuing.');
+  };
 
   const saveChanges = async (data: SaveReportInput) => {
     if (!id) return;
@@ -225,17 +235,23 @@ export default function ReportDetailPage() {
               <label className="field-label">Week start</label>
               <input
                 type="date"
-                {...register('weekStartDate', { required: true })}
+                {...register('weekStartDate', { required: 'Week start date is required.' })}
                 className="input"
               />
+              {errors.weekStartDate && (
+                <p className="text-danger text-xs mt-1">{errors.weekStartDate.message}</p>
+              )}
             </div>
             <div>
               <label className="field-label">Week end</label>
               <input
                 type="date"
-                {...register('weekEndDate', { required: true })}
+                {...register('weekEndDate', { required: 'Week end date is required.' })}
                 className="input"
               />
+              {errors.weekEndDate && (
+                <p className="text-danger text-xs mt-1">{errors.weekEndDate.message}</p>
+              )}
             </div>
           </div>
 
@@ -267,9 +283,16 @@ export default function ReportDetailPage() {
                   <div>
                     <label className="field-label">Task name</label>
                     <input
-                      {...register(`tasks.${index}.taskName` as const, { required: true })}
+                      {...register(`tasks.${index}.taskName` as const, {
+                        required: 'Task name is required.',
+                      })}
                       className="input"
                     />
+                    {errors.tasks?.[index]?.taskName && (
+                      <p className="text-danger text-xs mt-1">
+                        {errors.tasks[index]?.taskName?.message}
+                      </p>
+                    )}
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div>
@@ -490,7 +513,7 @@ export default function ReportDetailPage() {
             <button
               type="button"
               disabled={isSaving}
-              onClick={handleSubmit(saveChanges)}
+              onClick={handleSubmit(saveChanges, onInvalid)}
               className="btn btn-secondary"
             >
               Save changes
@@ -498,7 +521,7 @@ export default function ReportDetailPage() {
             <button
               type="button"
               disabled={isSaving}
-              onClick={handleSubmit(saveAndSubmit)}
+              onClick={handleSubmit(saveAndSubmit, onInvalid)}
               className="btn btn-primary"
             >
               Save &amp; submit

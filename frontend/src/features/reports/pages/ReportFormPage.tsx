@@ -13,7 +13,12 @@ export default function ReportFormPage() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { register, control, handleSubmit } = useForm<SaveReportInput>({
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SaveReportInput>({
     defaultValues: {
       weekStartDate: '',
       weekEndDate: '',
@@ -47,6 +52,10 @@ export default function ReportFormPage() {
   useEffect(() => {
     getProjectsApi().then(setProjects).catch(() => setProjects([]));
   }, []);
+
+  const onInvalid = () => {
+    setApiError('Please fix the highlighted fields below before continuing.');
+  };
 
   const saveDraft = async (data: SaveReportInput) => {
     setApiError(null);
@@ -102,17 +111,23 @@ export default function ReportFormPage() {
               <label className="field-label">Week start</label>
               <input
                 type="date"
-                {...register('weekStartDate', { required: true })}
+                {...register('weekStartDate', { required: 'Week start date is required.' })}
                 className="input"
               />
+              {errors.weekStartDate && (
+                <p className="text-danger text-xs mt-1">{errors.weekStartDate.message}</p>
+              )}
             </div>
             <div>
               <label className="field-label">Week end</label>
               <input
                 type="date"
-                {...register('weekEndDate', { required: true })}
+                {...register('weekEndDate', { required: 'Week end date is required.' })}
                 className="input"
               />
+              {errors.weekEndDate && (
+                <p className="text-danger text-xs mt-1">{errors.weekEndDate.message}</p>
+              )}
             </div>
           </div>
 
@@ -146,9 +161,16 @@ export default function ReportFormPage() {
                   <div>
                     <label className="field-label">Task name</label>
                     <input
-                      {...register(`tasks.${index}.taskName` as const, { required: true })}
+                      {...register(`tasks.${index}.taskName` as const, {
+                        required: 'Task name is required.',
+                      })}
                       className="input"
                     />
+                    {errors.tasks?.[index]?.taskName && (
+                      <p className="text-danger text-xs mt-1">
+                        {errors.tasks[index]?.taskName?.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -390,7 +412,7 @@ export default function ReportFormPage() {
             <button
               type="button"
               disabled={isSubmitting}
-              onClick={handleSubmit(saveDraft)}
+              onClick={handleSubmit(saveDraft, onInvalid)}
               className="btn btn-secondary"
             >
               Save draft
@@ -398,7 +420,7 @@ export default function ReportFormPage() {
             <button
               type="button"
               disabled={isSubmitting}
-              onClick={handleSubmit(saveAndSubmit)}
+              onClick={handleSubmit(saveAndSubmit, onInvalid)}
               className="btn btn-primary"
             >
               Submit report
