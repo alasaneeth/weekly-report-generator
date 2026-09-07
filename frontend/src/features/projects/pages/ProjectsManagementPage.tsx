@@ -79,7 +79,7 @@ export default function ProjectsManagementPage() {
   };
 
   return (
-    <div className="page p-4 sm:p-6 md:p-8">
+    <div className="page p-6 md:p-8">
       <div className="max-w-2xl mx-auto space-y-6">
         <h1 className="page-title">Projects &amp; Categories</h1>
 
@@ -135,7 +135,7 @@ export default function ProjectsManagementPage() {
             <p className="text-ink-muted text-sm">No projects yet.</p>
           )}
           {projects.map((p) => (
-            <div key={p.id} className="panel p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+            <div key={p.id} className="panel p-4 flex justify-between items-center">
               <div>
                 <p className="text-ink font-medium text-sm">
                   {p.name}{' '}

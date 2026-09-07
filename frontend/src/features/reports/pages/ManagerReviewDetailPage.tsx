@@ -84,9 +84,9 @@ export default function ManagerReviewDetailPage() {
   const canReview = report.status === 'Submitted';
 
   return (
-    <div className="page p-4 sm:p-6 md:p-8">
-      <div className="max-w-3xl mx-auto panel p-4 sm:p-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+    <div className="page p-6 md:p-8">
+      <div className="max-w-3xl mx-auto panel p-8 space-y-6">
+        <div className="flex justify-between items-center">
           <div>
             <h1 className="page-title">{report.userName}</h1>
             <p className="text-ink-muted text-sm mt-0.5">
@@ -169,7 +169,7 @@ export default function ManagerReviewDetailPage() {
         {canReview && (
           <div className="border-t border-border pt-6 space-y-3">
             {!showCommentBox ? (
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex gap-3">
                 <button onClick={handleApprove} disabled={isActing} className="btn btn-success">
                   Approve
                 </button>
@@ -191,7 +191,7 @@ export default function ManagerReviewDetailPage() {
                   className="input"
                   placeholder="Explain what needs to be corrected…"
                 />
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex gap-3">
                   <button
                     onClick={handleRequestChanges}
                     disabled={isActing}

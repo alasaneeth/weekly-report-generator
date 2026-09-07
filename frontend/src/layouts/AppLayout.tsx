@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { logout } from '../features/auth/store/authSlice';
@@ -20,78 +19,27 @@ function initials(name?: string) {
     .join('');
 }
 
-function MenuIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M3 5.5h14M3 10h14M3 14.5h14"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M4 4l10 10M14 4L4 14"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 export default function AppLayout() {
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [isNavOpen, setIsNavOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
   };
 
-  const closeNav = () => setIsNavOpen(false);
-
   return (
     <div className="h-screen flex bg-bg overflow-hidden">
-      {/* Mobile backdrop, shown only while the drawer is open */}
-      {isNavOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/40 md:hidden"
-          onClick={closeNav}
-          aria-hidden="true"
-        />
-      )}
-
-      <aside
-        className={`fixed md:static inset-y-0 left-0 z-40 w-64 h-screen bg-surface border-r border-border flex flex-col shrink-0 transform transition-transform duration-200 ease-in-out ${
-          isNavOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0`}
-      >
-        <div className="h-16 flex items-center justify-between gap-2 px-5 border-b border-border shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center text-white text-xs font-bold">
-              W
-            </div>
-            <span className="font-semibold text-ink text-sm tracking-tight">WorkLog</span>
+      <aside className="w-64 h-screen bg-surface border-r border-border flex flex-col shrink-0">
+        <div className="h-16 flex items-center gap-2 px-5 border-b border-border shrink-0">
+          <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center text-white text-xs font-bold">
+            W
           </div>
-          <button
-            onClick={closeNav}
-            className="md:hidden p-1 text-ink-muted hover:text-ink"
-            aria-label="Close menu"
-          >
-            <CloseIcon />
-          </button>
+          <span className="font-semibold text-ink text-sm tracking-tight">WorkLog</span>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto" onClick={closeNav}>
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {user?.role === 'Manager' && (
             <NavLink to="/" end className={linkClass}>
               Dashboard
@@ -151,28 +99,9 @@ export default function AppLayout() {
         </div>
       </aside>
 
-      <div className="flex-1 min-w-0 h-screen flex flex-col overflow-hidden">
-        {/* Mobile top bar with hamburger trigger */}
-        <header className="h-14 flex items-center gap-3 px-4 border-b border-border bg-surface shrink-0 md:hidden">
-          <button
-            onClick={() => setIsNavOpen(true)}
-            className="p-1 text-ink-muted hover:text-ink"
-            aria-label="Open menu"
-          >
-            <MenuIcon />
-          </button>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center text-white text-[10px] font-bold">
-              W
-            </div>
-            <span className="font-semibold text-ink text-sm tracking-tight">WorkLog</span>
-          </div>
-        </header>
-
-        <main className="flex-1 min-w-0 overflow-y-auto">
-          <Outlet />
-        </main>
-      </div>
+      <main className="flex-1 min-w-0 h-screen overflow-y-auto">
+        <Outlet />
+      </main>
     </div>
   );
 }

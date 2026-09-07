@@ -59,19 +59,19 @@ export default function ManagerReviewListPage() {
   };
 
   return (
-    <div className="page p-4 sm:p-6 md:p-8">
+    <div className="page p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
           <h1 className="page-title">Team Reports</h1>
           <p className="text-ink-muted text-sm mt-0.5">Review and act on reports submitted by your team.</p>
         </div>
 
-        <div className="flex gap-2 mb-4 border-b border-border overflow-x-auto">
+        <div className="flex gap-2 mb-4 border-b border-border">
           {filterTabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-3 py-2 text-sm font-medium border-b-2 -mb-px whitespace-nowrap shrink-0 transition ${
+              className={`px-3 py-2 text-sm font-medium border-b-2 -mb-px transition ${
                 activeTab === tab
                   ? 'border-primary text-primary'
                   : 'border-transparent text-ink-muted hover:text-ink'
@@ -82,7 +82,7 @@ export default function ManagerReviewListPage() {
           ))}
         </div>
 
-        <div className="panel p-4 mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 sm:items-end">
+        <div className="panel p-4 mb-6 grid grid-cols-2 md:grid-cols-5 gap-3 items-end">
           <div>
             <label className="field-label">Member</label>
             <select
@@ -143,7 +143,7 @@ export default function ManagerReviewListPage() {
         {loading && <p className="text-ink-muted text-sm">Loading…</p>}
         {error && <div className="alert alert-danger mb-4">{error}</div>}
         {!loading && !error && reports.length === 0 && (
-          <div className="panel p-4 sm:p-8 text-center">
+          <div className="panel p-8 text-center">
             <p className="text-ink-muted text-sm">No reports found for this filter.</p>
           </div>
         )}
@@ -153,7 +153,7 @@ export default function ManagerReviewListPage() {
             <Link
               key={r.id}
               to={`/manager/reports/${r.id}`}
-              className="block panel p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 transition hover:border-border-strong"
+              className="block panel p-4 flex justify-between items-center transition hover:border-border-strong"
             >
               <div>
                 <p className="text-ink font-medium text-sm">{r.userName}</p>
