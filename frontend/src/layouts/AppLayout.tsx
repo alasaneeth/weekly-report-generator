@@ -30,9 +30,9 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="min-h-screen flex bg-bg">
-      <aside className="w-64 bg-surface border-r border-border flex flex-col shrink-0">
-        <div className="h-16 flex items-center gap-2 px-5 border-b border-border">
+    <div className="h-screen flex bg-bg overflow-hidden">
+      <aside className="w-64 h-screen bg-surface border-r border-border flex flex-col shrink-0">
+        <div className="h-16 flex items-center gap-2 px-5 border-b border-border shrink-0">
           <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center text-white text-xs font-bold">
             W
           </div>
@@ -80,7 +80,7 @@ export default function AppLayout() {
           </NavLink>
         </nav>
 
-        <div className="border-t border-border p-3">
+        <div className="border-t border-border p-3 shrink-0">
           <div className="flex items-center gap-2.5 px-2 py-2 mb-1">
             <div className="w-8 h-8 rounded-full bg-primary-soft text-primary-hover flex items-center justify-center text-xs font-semibold shrink-0">
               {initials(user?.name)}
@@ -99,7 +99,7 @@ export default function AppLayout() {
         </div>
       </aside>
 
-      <main className="flex-1 min-w-0 overflow-y-auto">
+      <main className="flex-1 min-w-0 h-screen overflow-y-auto">
         <Outlet />
       </main>
     </div>
